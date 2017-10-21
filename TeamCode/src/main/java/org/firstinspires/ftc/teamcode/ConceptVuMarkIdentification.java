@@ -70,6 +70,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 @Disabled
 public class ConceptVuMarkIdentification extends LinearOpMode {
     //example comment
+    //Check the rockettes video for information on this
 
     public static final String TAG = "Vuforia VuMark Sample";
 
