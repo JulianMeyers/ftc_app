@@ -46,7 +46,7 @@ import com.qualcomm.robotcore.util.Range;
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all iterative OpModes contain.
  *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Use Android Studios to `Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
@@ -64,6 +64,8 @@ public class BasicTeleopRobot extends OpMode
         telemetry.addData("Status", "Initializing");
 
         robot.init(hardwareMap);
+
+        robot.colorSensor.enableLed(false);
 
     }
 
@@ -115,6 +117,16 @@ public class BasicTeleopRobot extends OpMode
         }else{
             robot.rightLiftMotor.setPower(0);
             robot.leftLiftMotor.setPower(0);
+        }
+
+        if(gamepad1.b){
+            robot.leftTopManipulator.setPosition(0.5);
+            robot.rightTopManipulator.setPosition(0.5);
+        }
+
+        if (gamepad1.x){
+            robot.leftTopManipulator.setPosition(0);
+            robot.rightTopManipulator.setPosition(1);
         }
 
         if(gamepad1.a){

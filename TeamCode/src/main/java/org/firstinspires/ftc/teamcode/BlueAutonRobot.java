@@ -53,6 +53,9 @@ public class BlueAutonRobot extends LinearOpMode {
     HardwareUltron robot = new HardwareUltron();
     private ElapsedTime runTime;
 
+    boolean sawRed;
+    boolean sawBlue;
+
 
     @Override
     public void runOpMode() {
@@ -62,6 +65,9 @@ public class BlueAutonRobot extends LinearOpMode {
         robot.init(hardwareMap);
 
          runTime  = new ElapsedTime();
+
+         sawRed = false;
+         sawBlue = false;
 
         // Set the LED in the beginning
         robot.colorSensor.enableLed(true);
@@ -80,31 +86,41 @@ public class BlueAutonRobot extends LinearOpMode {
         robot.lowerJewel.setPosition(0);//out
         robot.upperJewel.setPosition(0.6);//out
 
-        while(runTime.seconds() < 1.0 && opModeIsActive()){
+        while(runTime.seconds() < 5.0 && opModeIsActive()){
+            telemetry.addData("Red: ", robot.colorSensor.red());
+            telemetry.addData("Blue: ", robot.colorSensor.blue());
+            telemetry.addData("Clear: ", robot.colorSensor.alpha());
+            telemetry.update();
+            if(robot.colorSensor.red()>0 && robot.colorSensor.blue() == 0){
+                sawRed = true;
+            }
+            if(robot.colorSensor.blue()>0 && robot.colorSensor.red() == 0){
+                sawBlue = true;
+            }
         }
 
-        if (robot.colorSensor.red()>2){
-            telemetry.addData("I saw: ", "Red");
-            robot.rightFrontDrive.setPower(1);
-            robot.leftFrontDrive.setPower(1);
-            robot.rightRearDrive.setPower(1);
-            robot.leftRearDrive.setPower(1);
-
-            while(runTime.seconds() < 1.5 && opModeIsActive()){
-            }
-
-            robot.rightFrontDrive.setPower(0);
-            robot.leftFrontDrive.setPower(0);
-            robot.rightRearDrive.setPower(0);
-            robot.leftRearDrive.setPower(0);
-        }else if (robot.colorSensor.blue() > 2){
+        if (sawRed){
             telemetry.addData("I saw: ", "Red");
             robot.rightFrontDrive.setPower(-1);
             robot.leftFrontDrive.setPower(-1);
             robot.rightRearDrive.setPower(-1);
             robot.leftRearDrive.setPower(-1);
 
-            while(runTime.seconds() < 1.5 && opModeIsActive()){
+            while(runTime.seconds() < 5.5 && opModeIsActive()){
+            }
+
+            robot.rightFrontDrive.setPower(0);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+        }else if (sawBlue){
+            telemetry.addData("I saw: ", "Red");
+            robot.rightFrontDrive.setPower(1);
+            robot.leftFrontDrive.setPower(1);
+            robot.rightRearDrive.setPower(1);
+            robot.leftRearDrive.setPower(1);
+
+            while(runTime.seconds() < 5.5 && opModeIsActive()){
             }
 
             robot.rightFrontDrive.setPower(0);
