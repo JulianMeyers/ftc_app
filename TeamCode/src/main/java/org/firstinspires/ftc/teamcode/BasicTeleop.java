@@ -82,18 +82,17 @@ public class BasicTeleop extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
-        leftRearDrive = hardwareMap.get(DcMotor.class, "left_rear_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
-        rightRearDrive = hardwareMap.get(DcMotor.class, "right_rear_drive");
-        rightLiftMotor = hardwareMap.get(DcMotor.class, "right_lift_motor");
-        leftLiftMotor = hardwareMap.get(DcMotor.class, "left_lift_motor");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "LFD");
+        leftRearDrive = hardwareMap.get(DcMotor.class, "LRD");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "RFD");
+        rightRearDrive = hardwareMap.get(DcMotor.class, "RRD");
+        rightLiftMotor = hardwareMap.get(DcMotor.class, "RL");
+        leftLiftMotor = hardwareMap.get(DcMotor.class, "LL");
 
-        rightTopManipulator = hardwareMap.get(Servo.class, "right_top_manipulator");
-        leftTopManipulator = hardwareMap.get(Servo.class, "left_top_manipulator");
-        rightLowerManipulator = hardwareMap.get(Servo.class, "right_lower_manipulator");
-        leftLowerManipulator = hardwareMap.get(Servo.class, "left_lower_manipulator");
-        liftWinch = hardwareMap.get(CRServo.class, "lift_winch");
+        rightTopManipulator = hardwareMap.get(Servo.class, "TRS");
+        leftTopManipulator = hardwareMap.get(Servo.class, "TLS");
+        rightLowerManipulator = hardwareMap.get(Servo.class, "BRS");
+        leftLowerManipulator = hardwareMap.get(Servo.class, "BLS");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -139,6 +138,8 @@ public class BasicTeleop extends OpMode
 //        double leftPower;
 //        double rightPower;
 
+
+
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
@@ -162,7 +163,7 @@ public class BasicTeleop extends OpMode
         double v2 = r * Math.sin(robotAngle) - rightX;
         double v3 = r * Math.sin(robotAngle) + rightX;
         double v4 = r * Math.cos(robotAngle) - rightX;
-        v1    = Range.clip(v1, -1.0, 1.0) ;
+        v1   = Range.clip(v1, -1.0, 1.0) ;
         v2   = Range.clip(v2, -1.0, 1.0) ;
         v3   = Range.clip(v3, -1.0, 1.0) ;
         v4   = Range.clip(v4, -1.0, 1.0) ;
@@ -171,6 +172,10 @@ public class BasicTeleop extends OpMode
         rightFrontDrive.setPower(v2);
         leftRearDrive.setPower(v3);
         rightRearDrive.setPower(v4);
+
+        if(gamepad1.a){
+            rightTopManipulator.setPosition(1.0);
+        }
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
