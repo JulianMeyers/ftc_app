@@ -54,7 +54,6 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic Teleop", group="Teleop")
-@Disabled
 public class BasicTeleop extends OpMode
 {
     // Declare OpMode members.
@@ -97,9 +96,9 @@ public class BasicTeleop extends OpMode
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftRearDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightRearDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftRearDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);//
+        rightRearDrive.setDirection(DcMotor.Direction.REVERSE);
         rightLiftMotor.setDirection(DcMotor.Direction.FORWARD);
         leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -112,6 +111,10 @@ public class BasicTeleop extends OpMode
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+        telemetry.addData("Encoder Value", rightLiftMotor.getCurrentPosition());
+
+        rightLiftMotor.setPower(0);
+        leftLiftMotor.setPower(0);
     }
 
     /*
@@ -158,7 +161,7 @@ public class BasicTeleop extends OpMode
         //Mecanum Drive
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-        double rightX = gamepad1.right_stick_x;
+        double rightX = -gamepad1.right_stick_x;
         double v1 = r * Math.cos(robotAngle) + rightX;
         double v2 = r * Math.sin(robotAngle) - rightX;
         double v3 = r * Math.sin(robotAngle) + rightX;
@@ -173,6 +176,20 @@ public class BasicTeleop extends OpMode
         leftRearDrive.setPower(v3);
         rightRearDrive.setPower(v4);
 
+        if (gamepad1.right_trigger>0.01){
+            leftLiftMotor.setPower(gamepad1.right_trigger);
+            rightLiftMotor.setPower(gamepad1.right_trigger);
+        }else if (gamepad1.left_trigger>0.01){
+            leftLiftMotor.setPower(-gamepad1.left_trigger);
+            rightLiftMotor.setPower(-gamepad1.left_trigger);
+        }else{
+            rightLiftMotor.setPower(0);
+            leftLiftMotor.setPower(0);
+        }
+
+
+
+
         if(gamepad1.a){
             rightTopManipulator.setPosition(1.0);
         }
@@ -180,6 +197,9 @@ public class BasicTeleop extends OpMode
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "robotAngle (%.2f), rightX (%.2f)", robotAngle, rightX);
+        telemetry.addData("Encoder Value", rightLiftMotor.getCurrentPosition());
+        telemetry.addData("Left Trigger", gamepad1.left_trigger);
+        telemetry.addData("Right Trigger", gamepad1.right_trigger);
     }
 
     /*
