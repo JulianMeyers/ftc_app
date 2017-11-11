@@ -94,10 +94,12 @@ public class BasicTeleopRobot extends OpMode
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = -gamepad1.right_stick_x;
+
         double v1 = r * Math.cos(robotAngle) + rightX;
         double v2 = r * Math.sin(robotAngle) - rightX;
         double v3 = r * Math.sin(robotAngle) + rightX;
         double v4 = r * Math.cos(robotAngle) - rightX;
+
         v1   = Range.clip(v1, -1.0, 1.0) ;
         v2   = Range.clip(v2, -1.0, 1.0) ;
         v3   = Range.clip(v3, -1.0, 1.0) ;
@@ -120,7 +122,7 @@ public class BasicTeleopRobot extends OpMode
         }
 
         if(gamepad1.b){
-            robot.leftTopManipulator.setPosition(0.5);
+            robot.leftTopManipulator.setPosition(0.5);//These values should be adjusted to be even for the actual bot
             robot.rightTopManipulator.setPosition(0.5);
         }
 
