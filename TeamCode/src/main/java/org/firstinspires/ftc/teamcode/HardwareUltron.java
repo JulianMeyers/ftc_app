@@ -137,10 +137,6 @@ public class HardwareUltron
 
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        // Define and initialize ALL installed servos.
-//        lowerJewel.setPosition(1);//in
-//        upperJewel.setPosition(0);//in
     }
 
 
