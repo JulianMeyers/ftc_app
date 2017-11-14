@@ -27,13 +27,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.v1;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -50,8 +47,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Red Auton Robot", group="Linear Opmode")
-public class RedAutonRobot extends LinearOpMode {
+@Autonomous(name="Blue Auton Robot", group="Linear Opmode")
+public class BlueAutonRobot extends LinearOpMode {
 
     HardwareUltron robot = new HardwareUltron();
     private ElapsedTime runTime;
@@ -102,9 +99,8 @@ public class RedAutonRobot extends LinearOpMode {
             }
         }
 
-        if (sawBlue){
+        if (sawRed){
             telemetry.addData("I saw: ", "Red");
-            telemetry.update();
             robot.rightFrontDrive.setPower(-1);
             robot.leftFrontDrive.setPower(-1);
             robot.rightRearDrive.setPower(-1);
@@ -117,9 +113,8 @@ public class RedAutonRobot extends LinearOpMode {
             robot.leftFrontDrive.setPower(0);
             robot.rightRearDrive.setPower(0);
             robot.leftRearDrive.setPower(0);
-        }else if (sawRed){
+        }else if (sawBlue){
             telemetry.addData("I saw: ", "Red");
-            telemetry.update();
             robot.rightFrontDrive.setPower(1);
             robot.leftFrontDrive.setPower(1);
             robot.rightRearDrive.setPower(1);

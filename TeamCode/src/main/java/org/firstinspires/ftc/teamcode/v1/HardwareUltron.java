@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.v1;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -137,6 +137,40 @@ public class HardwareUltron
 
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public int sawRedVersusBlue(double time, ColorSensor whichSensor, boolean lightOn){
+        ElapsedTime colorTime = new ElapsedTime();
+        colorTime.reset();
+        whichSensor.enableLed(lightOn);
+
+        int redSum = 0;
+        int blueSum = 0;
+
+        int redTempVal = 0;
+        int blueTempVal = 0;
+
+        int sawRedVsBlue = 0;
+        while (colorTime.seconds() < time){
+            redTempVal = whichSensor.red();
+            blueTempVal = whichSensor.blue();
+            if (redTempVal > 0 && blueTempVal == 0) {
+                redSum += redTempVal;
+            }else if (blueTempVal > 0 && redTempVal == 0)
+                blueSum += blueTempVal;
+        }
+
+        if (redSum > blueSum){
+            sawRedVsBlue = 1;
+        }else if (redSum < blueSum){
+            sawRedVsBlue = 2;
+        }else if (redSum == blueSum){
+            sawRedVsBlue = 0;
+        }
+
+        whichSensor.enableLed(false);
+
+        return  sawRedVsBlue;
     }
 
 
