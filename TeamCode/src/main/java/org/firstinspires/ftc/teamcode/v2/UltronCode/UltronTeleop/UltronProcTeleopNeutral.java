@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronOpMode.DriverControlledProgram;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
 /**
  * Created by Julian on 11/15/2017.
@@ -12,6 +14,6 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 public class UltronProcTeleopNeutral extends DriverControlledProgram{
     @Override
     protected Robot buildRobot() {
-        return new Robot(this);
+        return new Ultron(this, SimpleColor.RED);
     }
 }

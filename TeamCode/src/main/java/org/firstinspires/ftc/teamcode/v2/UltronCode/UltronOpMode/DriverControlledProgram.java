@@ -24,6 +24,7 @@ public abstract class DriverControlledProgram extends OpMode {
         robot.stopAllCompoonents();
     }
 
+    @Override
     public final void init() {
         robot = buildRobot();
 
@@ -37,6 +38,7 @@ public abstract class DriverControlledProgram extends OpMode {
     public final void loop() {
         robot.driverControlledUpdate();
         onUpdate();
+        telemetry.addData("looping", "stuff");
     }
 
     public final void stop() {

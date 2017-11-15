@@ -110,7 +110,7 @@ public class BasicTeleopRobot extends OpMode
         robot.rightRearDrive.setPower(v4);*/
 
         double Ch1 = -gamepad1.right_stick_x;
-        double Ch3 = -gamepad1.left_stick_y;
+        double Ch3 = gamepad1.left_stick_y;
         double Ch4 = gamepad1.left_stick_x;
 
         double frontLeftPower = Ch3 + Ch1 + Ch4;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
@@ -33,6 +34,9 @@ public class LiftSystem extends SubSystem {
         leftTopServo = hardwareMap().servo.get(Ultron.LEFT_TOP_SERVO_KEY);
         rightLowerServo = hardwareMap().servo.get(Ultron.RIGHT_LOWER_SERVO_KEY);
         leftLowerServo = hardwareMap().servo.get(Ultron.LEFT_LOWER_SERVO_KEY);
+
+        rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class DriveSystem extends SubSystem{
 
     @Override
     public void handle() {
-        mecanumTrig();
+        mecanumNoTrig();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class DriveSystem extends SubSystem{
 
     public void mecanumNoTrig() {
         double Ch1 = -gamepad1().right_stick_x;
-        double Ch3 = -gamepad1().left_stick_y;
+        double Ch3 = gamepad1().left_stick_y;
         double Ch4 = gamepad1().left_stick_x;
 
         double frontLeftPower = Ch3 + Ch1 + Ch4;
