@@ -90,7 +90,7 @@ public class BasicTeleopRobot extends OpMode
     public void loop() {
 
         //Mecanum Drive
-        double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+        /*double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = -gamepad1.right_stick_x;
 
@@ -107,7 +107,21 @@ public class BasicTeleopRobot extends OpMode
         robot.leftFrontDrive.setPower(v1);
         robot.rightFrontDrive.setPower(v2);
         robot.leftRearDrive.setPower(v3);
-        robot.rightRearDrive.setPower(v4);
+        robot.rightRearDrive.setPower(v4);*/
+
+        double Ch1 = -gamepad1.right_stick_x;
+        double Ch3 = -gamepad1.left_stick_y;
+        double Ch4 = gamepad1.left_stick_x;
+
+        double frontLeftPower = Ch3 + Ch1 + Ch4;
+        double rearLeftPower = Ch3 + Ch1 - Ch4;
+        double frontRightPower = Ch3 - Ch1 - Ch4;
+        double rearRightPower = Ch3 - Ch1 + Ch4;
+
+        robot.leftFrontDrive.setPower(frontLeftPower);
+        robot.leftRearDrive.setPower(rearLeftPower);
+        robot.rightFrontDrive.setPower(frontRightPower);
+        robot.rightRearDrive.setPower(rearRightPower);
 
         if (gamepad1.right_trigger>0.01){
             robot.leftLiftMotor.setPower(gamepad1.right_trigger);
@@ -140,10 +154,6 @@ public class BasicTeleopRobot extends OpMode
             robot.upperJewel.setPosition(0);//in
         }
 
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Motors", "robotAngle (%.2f), rightX (%.2f)", robotAngle, rightX);
-        telemetry.addData("Left Trigger", gamepad1.left_trigger);
-        telemetry.addData("Right Trigger", gamepad1.right_trigger);
     }
 
     /*

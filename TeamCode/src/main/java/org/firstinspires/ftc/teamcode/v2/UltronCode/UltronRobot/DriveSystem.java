@@ -33,6 +33,7 @@ public class DriveSystem extends SubSystem{
         rearRight.setDirection(DcMotor.Direction.REVERSE);
 
         modeVoltage();
+        floatMode();
     }
 
     @Override
@@ -42,7 +43,7 @@ public class DriveSystem extends SubSystem{
 
     @Override
     public void stop() {
-
+        stopMotors();
     }
 
     public void floatMode() {
@@ -57,6 +58,14 @@ public class DriveSystem extends SubSystem{
         rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void stopMotors() {
+        brakeMode();
+        frontLeft.setPower(0);
+        rearLeft.setPower(0);
+        frontRight.setPower(0);
+        rearRight.setPower(0);
     }
 
     public void modeVoltage() {

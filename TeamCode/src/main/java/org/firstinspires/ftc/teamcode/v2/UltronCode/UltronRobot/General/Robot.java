@@ -17,7 +17,6 @@ public class Robot {
     private final Map<String, SubSystem> subSystems;
     private final Map<Class, SubSystem> classSubSystemMap;
     public final OpMode opMode;
-    public final UltronSettings settings;
 
     public volatile Gamepad gamepad1;
 
@@ -31,8 +30,6 @@ public class Robot {
         this.opMode = opMode;
         telemetry = opMode.telemetry;
         hardwareMap = opMode.hardwareMap;
-
-        settings = new UltronSettings();
 
         subSystems = new HashMap<>();
         classSubSystemMap = new HashMap<>();
