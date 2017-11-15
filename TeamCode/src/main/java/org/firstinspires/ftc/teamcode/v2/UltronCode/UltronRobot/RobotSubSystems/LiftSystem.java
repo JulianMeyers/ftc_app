@@ -35,8 +35,10 @@ public class LiftSystem extends SubSystem {
         rightLowerServo = hardwareMap().servo.get(Ultron.RIGHT_LOWER_SERVO_KEY);
         leftLowerServo = hardwareMap().servo.get(Ultron.LEFT_LOWER_SERVO_KEY);
 
-        rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightLiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        //WE HAVE A DEAD MOTOR FOR OUR LIFT, DO NOT USE
     }
 
     @Override
