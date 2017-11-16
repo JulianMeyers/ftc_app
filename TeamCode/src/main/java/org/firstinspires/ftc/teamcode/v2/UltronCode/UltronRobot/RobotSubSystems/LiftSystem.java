@@ -20,7 +20,7 @@ public class LiftSystem extends SubSystem {
     private Servo rightLowerServo;
     private Servo leftLowerServo;
 
-    public int currentSetting = 0;
+    public int currentLiftState = 0;
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
 
@@ -130,24 +130,24 @@ public class LiftSystem extends SubSystem {
 
     public void handleChangeInDPad() {
         if (gamepad1().dpad_up && !dPadWasUp) {
-            if (currentSetting < 4) {
-                currentSetting++;
+            if (currentLiftState < 4) {
+                currentLiftState++;
             }
         }
         if (gamepad1().dpad_down && !dPadWasDown) {
-            if (currentSetting > 0) {
-                currentSetting--;
+            if (currentLiftState > 0) {
+                currentLiftState--;
             }
         }
-        if (currentSetting == 0) {
+        if (currentLiftState == 0) {
             goToTargetLiftPos(Ultron.ZERO_CUBE_HEIGHT);
-        }else if (currentSetting == 1) {
+        }else if (currentLiftState == 1) {
             goToTargetLiftPos(Ultron.HALF_CUBE_HEIGHT);
-        }else if (currentSetting == 2) {
+        }else if (currentLiftState == 2) {
             goToTargetLiftPos(Ultron.ONE_CUBE_HEIGHT);
-        }else if (currentSetting == 3) {
+        }else if (currentLiftState == 3) {
             goToTargetLiftPos(Ultron.TWO_CUBE_HEIGHT);
-        }else if (currentSetting == 4) {
+        }else if (currentLiftState == 4) {
             goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
         }
         dPadWasUp = gamepad1().dpad_up;
