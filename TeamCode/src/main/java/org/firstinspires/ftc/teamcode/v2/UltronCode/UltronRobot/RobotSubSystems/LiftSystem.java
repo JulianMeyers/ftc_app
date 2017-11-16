@@ -41,8 +41,10 @@ public class LiftSystem extends SubSystem {
     public void handle() {
         if (Ultron.TWO_DRIVERS) {
             handleChangeInDPad(gamepad2());
+            manualControls(gamepad2());
         }else {
             handleChangeInDPad(gamepad1());
+            manualControls(gamepad1());
         }
 
         telemetry().addData("Lift Position: ", getLiftPosition());
@@ -53,8 +55,6 @@ public class LiftSystem extends SubSystem {
         liftFloatMode();
         setLifPower(0);
     }
-
-
 
     public void liftFloatMode() {
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -116,6 +116,19 @@ public class LiftSystem extends SubSystem {
         }
         dPadWasUp = gamepadToUse.dpad_up;
         dPadWasDown = gamepadToUse.dpad_down;
+    }
+
+    public void manualControls(Gamepad gamepad) {
+        if (gamepad.right_trigger>0.01){
+            leftLiftMotor.setPower(gamepad.right_trigger);
+            rightLiftMotor.setPower(gamepad.right_trigger);
+        }else if (gamepad.left_trigger>0.01){
+            leftLiftMotor.setPower(-gamepad.left_trigger);
+            rightLiftMotor.setPower(-gamepad.left_trigger);
+        }else{
+            rightLiftMotor.setPower(0);
+            leftLiftMotor.setPower(0);
+        }
     }
 
     public int getLiftPosition() {

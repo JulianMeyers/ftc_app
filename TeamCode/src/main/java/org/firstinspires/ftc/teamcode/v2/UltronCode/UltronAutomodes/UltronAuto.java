@@ -23,7 +23,7 @@ public abstract class UltronAuto extends AutonomousProgram{
 
     @Override
     protected Robot buildRobot() {
-        Ultron ultron = new Ultron(this, alliance);
+        Ultron ultron = new Ultron(this, alliance, null);
         driveSystem = ultron.getSubSystem(DriveSystem.class);
         liftSystem = ultron.getSubSystem(LiftSystem.class);
         cubeSystem = ultron.getSubSystem(CubeSystem.class);
