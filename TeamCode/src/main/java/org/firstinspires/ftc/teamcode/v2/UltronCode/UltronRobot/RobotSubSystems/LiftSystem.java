@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.SubSystem;
@@ -40,7 +39,7 @@ public class LiftSystem extends SubSystem {
 
     @Override
     public void handle() {
-        if (Ultron.twoDrivers) {
+        if (Ultron.TWO_DRIVERS) {
             handleChangeInDPad(gamepad2());
         }else {
             handleChangeInDPad(gamepad1());
