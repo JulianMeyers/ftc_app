@@ -22,7 +22,7 @@ public abstract class DriverControlledProgram extends OpMode {
     }
 
     protected void onStop() {
-        robot.stopAllCompoonents();
+        robot.stopAllComponents();
     }
 
     @Override

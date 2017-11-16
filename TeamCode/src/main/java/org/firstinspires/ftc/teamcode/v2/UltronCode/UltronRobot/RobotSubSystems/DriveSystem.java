@@ -39,6 +39,11 @@ public class DriveSystem extends SubSystem{
 
     @Override
     public void handle() {
+        if (gamepad1().right_bumper) {
+            slow = true;
+        } else {
+            slow = false;
+        }
         mecanumNoTrig();
     }
 
@@ -98,10 +103,18 @@ public class DriveSystem extends SubSystem{
         rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0) ;
         rearRightPower = Range.clip(rearRightPower, -1.0, 1.0) ;
 
-        frontLeft.setPower(frontLeftPower);
-        frontRight.setPower(frontRightPower);
-        rearLeft.setPower(rearLeftPower);
-        rearRight.setPower(rearRightPower);
+        if (slow) {
+            frontLeft.setPower(frontLeftPower / 2.0);
+            frontRight.setPower(frontRightPower / 2.0);
+            rearLeft.setPower(rearLeftPower / 2.0);
+            rearRight.setPower(rearRightPower / 2.0);
+        } else {
+            frontLeft.setPower(frontLeftPower);
+            frontRight.setPower(frontRightPower);
+            rearLeft.setPower(rearLeftPower);
+            rearRight.setPower(rearRightPower);
+        }
+
     }
 
     public void mecanumNoTrig() {

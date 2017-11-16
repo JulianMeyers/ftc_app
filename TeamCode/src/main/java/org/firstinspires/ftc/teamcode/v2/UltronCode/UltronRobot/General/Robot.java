@@ -65,7 +65,7 @@ public class Robot {
         }
     }
 
-    public final void stopAllCompoonents() {
+    public final void stopAllComponents() {
         for(SubSystem subSystem:subSystems.values()) {
             try {
                 subSystem.stop();
