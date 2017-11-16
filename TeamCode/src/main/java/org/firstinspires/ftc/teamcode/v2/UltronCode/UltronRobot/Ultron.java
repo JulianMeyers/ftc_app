@@ -22,11 +22,17 @@ public class Ultron extends Robot{
     //LiftSystem
     public static final String LIFT_R_WINCH_KEY = "RL";
     public static final String LIFT_L_WINCH_KEY = "LL";
+    public static final int ZERO_CUBE_HEIGHT = 0;
+    public static final int HALF_CUBE_HEIGHT = 0;
+    public static final int ONE_CUBE_HEIGHT = 0;
+    public static final int TWO_CUBE_HEIGHT = 0;
+    public static final int THREE_CUBE_HEIGHT = 0;
+
+    //CubeSystem
     public static final String RIGHT_TOP_SERVO_KEY = "RTS";
     public static final String LEFT_TOP_SERVO_KEY = "LTS";
     public static final String RIGHT_LOWER_SERVO_KEY = "RLS";
     public static final String LEFT_LOWER_SERVO_KEY = "LLS";
-
     public static final double RIGHT_TOP_SERVO_OPEN = 0;
     public static final double RIGHT_TOP_SERVO_CLOSED = 0;
     public static final double LEFT_TOP_SERVO_OPEN = 0;
@@ -36,18 +42,16 @@ public class Ultron extends Robot{
     public static final double LEFT_LOWER_SERVO_OPEN = 0;
     public static final double LEFT_LOWER_SERVO_CLOSED = 0;
 
-    public static final int ZERO_CUBE_HEIGHT = 0;
-    public static final int HALF_CUBE_HEIGHT = 0;
-    public static final int ONE_CUBE_HEIGHT = 0;
-    public static final int TWO_CUBE_HEIGHT = 0;
-    public static final int THREE_CUBE_HEIGHT = 0;
+    public static boolean TWO_DRIVERS;
 
     public static SimpleColor ALLIANCE_COLOR;
 
-    public Ultron(OpMode opMode, SimpleColor alliance) {
+    public Ultron(OpMode opMode, SimpleColor alliance, Boolean twoDrivers) {
         super(opMode);
         ALLIANCE_COLOR = alliance;
+        TWO_DRIVERS = twoDrivers;
         putSubSystem("drive", new DriveSystem(this));
         putSubSystem("lift", new LiftSystem(this));
+        putSubSystem("cube", new LiftSystem(this));
     }
 }

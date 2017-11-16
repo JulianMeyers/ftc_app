@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
@@ -15,11 +16,6 @@ public class LiftSystem extends SubSystem {
     private DcMotor rightLiftMotor;
     private DcMotor leftLiftMotor;
 
-    private Servo rightTopServo;
-    private Servo leftTopServo;
-    private Servo rightLowerServo;
-    private Servo leftLowerServo;
-
     public int currentLiftState = 0;
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
@@ -32,10 +28,6 @@ public class LiftSystem extends SubSystem {
     public void init() {
         rightLiftMotor = hardwareMap().dcMotor.get(Ultron.LIFT_R_WINCH_KEY);
         leftLiftMotor = hardwareMap().dcMotor.get(Ultron.LIFT_L_WINCH_KEY);
-        rightTopServo = hardwareMap().servo.get(Ultron.RIGHT_TOP_SERVO_KEY);
-        leftTopServo = hardwareMap().servo.get(Ultron.LEFT_TOP_SERVO_KEY);
-        rightLowerServo = hardwareMap().servo.get(Ultron.RIGHT_LOWER_SERVO_KEY);
-        leftLowerServo = hardwareMap().servo.get(Ultron.LEFT_LOWER_SERVO_KEY);
 
         rightLiftMotor.setDirection(DcMotor.Direction.FORWARD);
         leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -48,22 +40,12 @@ public class LiftSystem extends SubSystem {
 
     @Override
     public void handle() {
-        handleChangeInDPad();
-
-        if(gamepad1().b){
-            openTop();
+        if (Ultron.twoDrivers) {
+            handleChangeInDPad(gamepad2());
+        }else {
+            handleChangeInDPad(gamepad1());
         }
 
-        if (gamepad1().x){
-            closeTop();
-        }
-
-        if (gamepad1().dpad_left) {
-            openLower();
-        }
-        if (gamepad1().dpad_right) {
-            closeLower();
-        }
         telemetry().addData("Lift Position: ", getLiftPosition());
     }
 
@@ -73,25 +55,7 @@ public class LiftSystem extends SubSystem {
         setLifPower(0);
     }
 
-    public void openTop() {
-        rightTopServo.setPosition(Ultron.RIGHT_TOP_SERVO_OPEN);
-        leftTopServo.setPosition(Ultron.LEFT_TOP_SERVO_OPEN);
-    }
 
-    public void closeTop() {
-        rightTopServo.setPosition(Ultron.RIGHT_TOP_SERVO_CLOSED);
-        leftTopServo.setPosition(Ultron.LEFT_TOP_SERVO_CLOSED);
-    }
-
-    public void openLower() {
-        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_OPEN);
-        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_OPEN);
-    }
-
-    public void closeLower() {
-        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_CLOSED);
-        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_CLOSED);
-    }
 
     public void liftFloatMode() {
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -128,13 +92,14 @@ public class LiftSystem extends SubSystem {
         }
     }
 
-    public void handleChangeInDPad() {
-        if (gamepad1().dpad_up && !dPadWasUp) {
+    public void handleChangeInDPad(Gamepad gamepad) {
+        Gamepad gamepadToUse = gamepad;
+        if (gamepadToUse.dpad_up && !dPadWasUp) {
             if (currentLiftState < 4) {
                 currentLiftState++;
             }
         }
-        if (gamepad1().dpad_down && !dPadWasDown) {
+        if (gamepadToUse.dpad_down && !dPadWasDown) {
             if (currentLiftState > 0) {
                 currentLiftState--;
             }
@@ -150,8 +115,8 @@ public class LiftSystem extends SubSystem {
         }else if (currentLiftState == 4) {
             goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
         }
-        dPadWasUp = gamepad1().dpad_up;
-        dPadWasDown = gamepad1().dpad_down;
+        dPadWasUp = gamepadToUse.dpad_up;
+        dPadWasDown = gamepadToUse.dpad_down;
     }
 
     public int getLiftPosition() {

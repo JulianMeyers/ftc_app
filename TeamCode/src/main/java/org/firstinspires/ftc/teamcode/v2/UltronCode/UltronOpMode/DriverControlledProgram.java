@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 public abstract class DriverControlledProgram extends OpMode {
 
     private Robot robot;
+    protected boolean twoDrivers;
 
     protected abstract Robot buildRobot();
 
@@ -27,7 +28,6 @@ public abstract class DriverControlledProgram extends OpMode {
     @Override
     public final void init() {
         robot = buildRobot();
-
         robot.init();
     }
 

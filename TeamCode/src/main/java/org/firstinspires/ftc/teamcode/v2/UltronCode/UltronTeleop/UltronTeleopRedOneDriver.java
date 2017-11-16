@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 /**
  * Created by Julian on 11/15/2017.
  */
-@TeleOp(name = "Prac Teleop Red")
-public class UltronProcTeleopRedOneDriver extends DriverControlledProgram{
+@TeleOp(name = "Teleop Red One")
+public class UltronTeleopRedOneDriver extends DriverControlledProgram{
     @Override
     protected Robot buildRobot() {
-        return new Ultron(this, SimpleColor.RED);
+        return new Ultron(this, SimpleColor.RED, false);
     }
 }
