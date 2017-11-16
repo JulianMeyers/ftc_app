@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
@@ -21,9 +20,12 @@ public class LiftSystem extends SubSystem {
     private Servo rightLowerServo;
     private Servo leftLowerServo;
 
+    public int currentSetting = 0;
+    private boolean dPadWasUp = false;
+    private boolean dPadWasDown = false;
+
     public LiftSystem(Robot robot) {
         super(robot);
-
     }
 
     @Override
@@ -38,39 +40,121 @@ public class LiftSystem extends SubSystem {
         rightLiftMotor.setDirection(DcMotor.Direction.FORWARD);
         leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
 
+        liftBrakeMode();
+        setLiftVoltageMode();
+
         //WE HAVE A DEAD MOTOR FOR OUR LIFT, DO NOT USE
     }
 
     @Override
     public void handle() {
-
-        if (gamepad1().right_trigger>0.01){
-            leftLiftMotor.setPower(gamepad1().right_trigger);
-            rightLiftMotor.setPower(gamepad1().right_trigger);
-        }else if (gamepad1().left_trigger>0.01){
-            leftLiftMotor.setPower(-gamepad1().left_trigger);
-            rightLiftMotor.setPower(-gamepad1().left_trigger);
-        }else{
-            rightLiftMotor.setPower(0);
-            leftLiftMotor.setPower(0);
-        }
+        handleChangeInDPad();
 
         if(gamepad1().b){
-            leftTopServo.setPosition(0.5);//These values should be adjusted to be even for the actual bot
-            rightTopServo.setPosition(0.5);
+            openTop();
         }
 
         if (gamepad1().x){
-            leftTopServo.setPosition(0);
-            rightTopServo.setPosition(1);
+            closeTop();
         }
+
+        if (gamepad1().dpad_left) {
+            openLower();
+        }
+        if (gamepad1().dpad_right) {
+            closeLower();
+        }
+        telemetry().addData("Lift Position: ", getLiftPosition());
     }
 
     @Override
     public void stop() {
-        leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        liftFloatMode();
+        setLifPower(0);
+    }
+
+    public void openTop() {
+        rightTopServo.setPosition(Ultron.RIGHT_TOP_SERVO_OPEN);
+        leftTopServo.setPosition(Ultron.LEFT_TOP_SERVO_OPEN);
+    }
+
+    public void closeTop() {
+        rightTopServo.setPosition(Ultron.RIGHT_TOP_SERVO_CLOSED);
+        leftTopServo.setPosition(Ultron.LEFT_TOP_SERVO_CLOSED);
+    }
+
+    public void openLower() {
+        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_OPEN);
+        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_OPEN);
+    }
+
+    public void closeLower() {
+        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_CLOSED);
+        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_CLOSED);
+    }
+
+    public void liftFloatMode() {
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rightLiftMotor.setPower(0);
-        leftLiftMotor.setPower(0);
+        leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
+    public void liftBrakeMode() {
+        rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void setLifPower(double power) {
+        rightLiftMotor.setPower(power);
+        leftLiftMotor.setPower(power);
+    }
+
+    public void setLiftVoltageMode() {
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void setLiftEncoderMode() {
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void goToTargetLiftPos(int position) {
+        int currentPosition = rightLiftMotor.getCurrentPosition();
+        int difference = currentPosition - position;
+        if (difference > 20) {
+            setLifPower(-0.5);
+        }else if (difference < -20) {
+            setLifPower(0.75);
+        }
+    }
+
+    public void handleChangeInDPad() {
+        if (gamepad1().dpad_up && !dPadWasUp) {
+            if (currentSetting < 4) {
+                currentSetting++;
+            }
+        }
+        if (gamepad1().dpad_down && !dPadWasDown) {
+            if (currentSetting > 0) {
+                currentSetting--;
+            }
+        }
+        if (currentSetting == 0) {
+            goToTargetLiftPos(Ultron.ZERO_CUBE_HEIGHT);
+        }else if (currentSetting == 1) {
+            goToTargetLiftPos(Ultron.HALF_CUBE_HEIGHT);
+        }else if (currentSetting == 2) {
+            goToTargetLiftPos(Ultron.ONE_CUBE_HEIGHT);
+        }else if (currentSetting == 3) {
+            goToTargetLiftPos(Ultron.TWO_CUBE_HEIGHT);
+        }else if (currentSetting == 4) {
+            goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
+        }
+        dPadWasUp = gamepad1().dpad_up;
+        dPadWasDown = gamepad1().dpad_down;
+    }
+
+    public int getLiftPosition() {
+        return rightLiftMotor.getCurrentPosition();
     }
 }

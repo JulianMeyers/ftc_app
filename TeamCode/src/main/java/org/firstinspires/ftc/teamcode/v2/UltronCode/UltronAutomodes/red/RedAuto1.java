@@ -9,6 +9,6 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRe
 public class RedAuto1 extends UltronAutoRed {
     @Override
     public void main() {
-        //Do stuff
+
     }
 }

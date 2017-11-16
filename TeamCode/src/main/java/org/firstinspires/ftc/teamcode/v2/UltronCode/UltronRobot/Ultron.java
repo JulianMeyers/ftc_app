@@ -27,6 +27,21 @@ public class Ultron extends Robot{
     public static final String RIGHT_LOWER_SERVO_KEY = "RLS";
     public static final String LEFT_LOWER_SERVO_KEY = "LLS";
 
+    public static final double RIGHT_TOP_SERVO_OPEN = 0;
+    public static final double RIGHT_TOP_SERVO_CLOSED = 0;
+    public static final double LEFT_TOP_SERVO_OPEN = 0;
+    public static final double LEFT_TOP_SERVO_CLOSED = 0;
+    public static final double RIGHT_LOWER_SERVO_OPEN = 0;
+    public static final double RIGHT_LOWER_SERVO_CLOSED = 0;
+    public static final double LEFT_LOWER_SERVO_OPEN = 0;
+    public static final double LEFT_LOWER_SERVO_CLOSED = 0;
+
+    public static final int ZERO_CUBE_HEIGHT = 0;
+    public static final int HALF_CUBE_HEIGHT = 0;
+    public static final int ONE_CUBE_HEIGHT = 0;
+    public static final int TWO_CUBE_HEIGHT = 0;
+    public static final int THREE_CUBE_HEIGHT = 0;
+
     public static SimpleColor ALLIANCE_COLOR;
 
     public Ultron(OpMode opMode, SimpleColor alliance) {
