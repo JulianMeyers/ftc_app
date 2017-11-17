@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.DriveSystem;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.JewelSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
@@ -42,6 +43,21 @@ public class Ultron extends Robot{
     public static final double LEFT_LOWER_SERVO_OPEN = 0;
     public static final double LEFT_LOWER_SERVO_CLOSED = 0;
 
+    //JewelSystem
+    public static final String RIGHT_TOP_JEWEL_SERVO_KEY = "";
+    public static final String RIGHT_LOWER_JEWEL_SERVO_KEY = "";
+    public static final String LEFT_TOP_JEWEL_SERVO_KEY = "";
+    public static final String LEFT_LOWER_JEWEL_SERVO_KEY = "";
+    public static final double RIGHT_TOP_SERVO_DOWN = 0;
+    public static final double RIGHT_LOWER_SERVO_DOWN = 0;
+    public static final double RIGHT_TOP_SERVO_UP = 0;
+    public static final double RIGHT_LOWER_SERVO_UP = 0;
+    public static final double LEFT_TOP_SERVO_DOWN = 0;
+    public static final double LEFT_LOWER_SERVO_DOWN = 0;
+    public static final double LEFT_TOP_SERVO_UP = 0;
+    public static final double LEFT_LOWER_SERVO_UP = 0;
+
+
     public static boolean TWO_DRIVERS;
 
     public static SimpleColor ALLIANCE;
@@ -53,5 +69,6 @@ public class Ultron extends Robot{
         putSubSystem("drive", new DriveSystem(this));
         putSubSystem("lift", new LiftSystem(this));
         putSubSystem("cube", new LiftSystem(this));
+        putSubSystem("jewel", new JewelSystem(this));
     }
 }

@@ -33,8 +33,6 @@ public class LiftSystem extends SubSystem {
 
         liftBrakeMode();
         setLiftVoltageMode();
-
-        //WE HAVE A DEAD MOTOR FOR OUR LIFT, DO NOT USE
     }
 
     @Override

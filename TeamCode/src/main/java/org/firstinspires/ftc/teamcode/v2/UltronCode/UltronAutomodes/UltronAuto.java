@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronOpMode.AutonomousProgr
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.CubeSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.JewelSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
@@ -16,6 +17,7 @@ public abstract class UltronAuto extends AutonomousProgram{
     public DriveSystem driveSystem;
     public LiftSystem liftSystem;
     public CubeSystem cubeSystem;
+    public JewelSystem jewelSystem;
 
     private SimpleColor alliance;
 
@@ -27,6 +29,7 @@ public abstract class UltronAuto extends AutonomousProgram{
         driveSystem = ultron.getSubSystem(DriveSystem.class);
         liftSystem = ultron.getSubSystem(LiftSystem.class);
         cubeSystem = ultron.getSubSystem(CubeSystem.class);
+        jewelSystem = ultron.getSubSystem(JewelSystem.class);
 
         return ultron;
     }
