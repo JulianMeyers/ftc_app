@@ -57,10 +57,9 @@ public class Ultron extends Robot{
     public static final double LEFT_TOP_SERVO_UP = 0;
     public static final double LEFT_LOWER_SERVO_UP = 0;
 
+    public boolean TWO_DRIVERS;
 
-    public static boolean TWO_DRIVERS;
-
-    public static SimpleColor ALLIANCE;
+    public SimpleColor ALLIANCE;
 
     public Ultron(OpMode opMode, SimpleColor alliance, Boolean twoDrivers) {
         super(opMode);
