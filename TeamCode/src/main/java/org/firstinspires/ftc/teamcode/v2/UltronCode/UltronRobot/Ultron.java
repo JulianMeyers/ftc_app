@@ -44,11 +44,11 @@ public class Ultron extends Robot{
 
     public static boolean TWO_DRIVERS;
 
-    public static SimpleColor ALLIANCE_COLOR;
+    public static SimpleColor ALLIANCE;
 
     public Ultron(OpMode opMode, SimpleColor alliance, Boolean twoDrivers) {
         super(opMode);
-        ALLIANCE_COLOR = alliance;
+        ALLIANCE = alliance;
         TWO_DRIVERS = twoDrivers;
         putSubSystem("drive", new DriveSystem(this));
         putSubSystem("lift", new LiftSystem(this));
