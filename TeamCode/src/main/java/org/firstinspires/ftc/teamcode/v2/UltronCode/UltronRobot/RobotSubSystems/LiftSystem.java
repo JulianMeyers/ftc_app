@@ -32,12 +32,13 @@ public class LiftSystem extends SubSystem {
         leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         liftBrakeMode();
+        resetEncoders();
         setLiftVoltageMode();
     }
 
     @Override
     public void handle() {
-        if (Ultron.TWO_DRIVERS) {
+        if (robot.TWO_DRIVERS) {
             handleChangeInDPad(gamepad2());
             manualControls(gamepad2());
         }else {
@@ -77,6 +78,11 @@ public class LiftSystem extends SubSystem {
     public void setLiftEncoderMode() {
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void resetEncoders() {
+        rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void goToTargetLiftPos(int position) {

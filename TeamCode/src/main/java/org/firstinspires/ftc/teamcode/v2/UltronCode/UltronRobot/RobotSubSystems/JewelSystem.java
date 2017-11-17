@@ -29,7 +29,7 @@ public class JewelSystem extends SubSystem {
 
     @Override
     public void handle() {
-        if (Ultron.TWO_DRIVERS) {
+        if (robot.TWO_DRIVERS) {
             if (gamepad2().a) {
                 rightDown();
                 leftDown();

@@ -33,7 +33,7 @@ public class CubeSystem extends SubSystem {
 
     @Override
     public void handle() {
-        if (Ultron.TWO_DRIVERS) {
+        if (robot.TWO_DRIVERS) {
             if (gamepad2().b) {
                 openTop();
             }

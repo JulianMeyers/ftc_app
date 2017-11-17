@@ -26,6 +26,8 @@ public class Robot {
 
     public final HardwareMap hardwareMap;
 
+    public boolean TWO_DRIVERS;
+
     public Robot(OpMode opMode) {
         this.opMode = opMode;
         telemetry = opMode.telemetry;
