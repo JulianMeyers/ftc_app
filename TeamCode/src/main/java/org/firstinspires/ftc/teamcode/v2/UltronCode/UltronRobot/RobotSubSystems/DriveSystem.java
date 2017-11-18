@@ -34,7 +34,7 @@ public class DriveSystem extends SubSystem{
         rearRight.setDirection(DcMotor.Direction.REVERSE);
 
         modeReset();
-        modeVoltage();
+        modeSpeed();
         floatMode();
     }
 
@@ -46,6 +46,7 @@ public class DriveSystem extends SubSystem{
             slow = false;
         }
         mecanumNoTrig();
+        displayValues();
     }
 
     @Override
@@ -65,6 +66,13 @@ public class DriveSystem extends SubSystem{
         rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void displayValues() {
+        telemetry().addData("Front Right: ", frontRight.getCurrentPosition());
+        telemetry().addData("Front Left: ", frontLeft.getCurrentPosition());
+        telemetry().addData("Rear Right: ", rearRight.getCurrentPosition());
+        telemetry().addData("Rear Left: ", rearLeft.getCurrentPosition());
     }
 
     public void stopMotors() {
