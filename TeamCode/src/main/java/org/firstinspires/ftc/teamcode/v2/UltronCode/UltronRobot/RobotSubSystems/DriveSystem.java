@@ -34,7 +34,7 @@ public class DriveSystem extends SubSystem{
         rearRight.setDirection(DcMotor.Direction.REVERSE);
 
         modeReset();
-        modeSpeed();
+        modeVoltage();
         floatMode();
     }
 
@@ -102,6 +102,13 @@ public class DriveSystem extends SubSystem{
         rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void driveForward(double power) {
+        frontLeft.setPower(power);
+        rearLeft.setPower(power);
+        frontRight.setPower(power);
+        rearRight.setPower(power);
     }
 
     public void mecanumTrig() {
