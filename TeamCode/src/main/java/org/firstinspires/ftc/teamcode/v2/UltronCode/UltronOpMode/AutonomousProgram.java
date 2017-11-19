@@ -15,26 +15,32 @@ public abstract class AutonomousProgram extends LinearOpMode{
 
     public abstract void main();
 
-    public void postInit() {};
+    public void postInit() {}
 
     public final void runOpMode () throws InterruptedException {
-        robot = buildRobot();
+        try {
+            robot = buildRobot();
+        }catch (Exception ex) {
+            telemetry.addData("Error building robot", ex.getMessage());
+            ex.printStackTrace();
+        }
 
         try {
             robot.init();
-            postInit();
         }catch (Exception ex) {
-            telemetry.addData("Error", ex.getMessage());
+            telemetry.addData("Error with init", ex.getMessage());
             ex.printStackTrace();
         }
+        telemetry.update();
 
         waitForStart();
 
         try {
             main();
         } catch(Exception ex) {
-            telemetry.addData("Error", ex.getMessage());
+            telemetry.addData("Error with main", ex.getMessage());
             ex.printStackTrace();
+            telemetry.update();
         }
     }
 

@@ -48,6 +48,7 @@ public class Robot {
                 subSystem.init();
             } catch(Exception ex) {
                 telemetry.addData("Error!!!", ex.getMessage());
+                telemetry.addData("subsystem", subSystem.getClass());
                 ex.printStackTrace();
             }
         }
