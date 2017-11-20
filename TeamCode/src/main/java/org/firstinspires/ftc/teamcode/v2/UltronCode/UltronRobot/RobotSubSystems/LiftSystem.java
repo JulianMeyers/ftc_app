@@ -19,6 +19,17 @@ public class LiftSystem extends SubSystem {
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
 
+    private enum LiftState{
+        ZERO_CUBE_HEIGHT,
+        HALF_CUBE_HEIGHT,
+        ONE_CUBE_HEIGHT,
+        TWO_CUBE_HEIGHT,
+        THREE_CUBE_HEIGHT
+    }
+
+    private LiftState liftState;
+
+
     public LiftSystem(Robot robot) {
         super(robot);
     }
@@ -30,6 +41,8 @@ public class LiftSystem extends SubSystem {
 
         rightLiftMotor.setDirection(DcMotor.Direction.FORWARD);
         leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        liftState = LiftState.ZERO_CUBE_HEIGHT;
 
         liftBrakeMode();
         resetEncoders();
@@ -98,25 +111,53 @@ public class LiftSystem extends SubSystem {
     public void handleChangeInDPad(Gamepad gamepad) {
         Gamepad gamepadToUse = gamepad;
         if (gamepadToUse.dpad_up && !dPadWasUp) {
-            if (currentLiftState < 4) {
-                currentLiftState++;
+            switch (liftState){
+                case ZERO_CUBE_HEIGHT:
+                    liftState = LiftState.HALF_CUBE_HEIGHT;
+                    break;
+                case HALF_CUBE_HEIGHT:
+                    liftState = LiftState.ONE_CUBE_HEIGHT;
+                    break;
+                case TWO_CUBE_HEIGHT:
+                    liftState = LiftState.THREE_CUBE_HEIGHT;
+                    break;
+                default:
+                    break;
             }
         }
+
         if (gamepadToUse.dpad_down && !dPadWasDown) {
-            if (currentLiftState > 0) {
-                currentLiftState--;
+            switch (liftState) {
+                case ONE_CUBE_HEIGHT:
+                    liftState = LiftState.HALF_CUBE_HEIGHT;
+                    break;
+                case TWO_CUBE_HEIGHT:
+                    liftState = LiftState.ONE_CUBE_HEIGHT;
+                    break;
+                case THREE_CUBE_HEIGHT:
+                    liftState = LiftState.TWO_CUBE_HEIGHT;
+                    break;
+                default:
+                    break;
             }
         }
-        if (currentLiftState == 0) {
-            goToTargetLiftPos(Ultron.ZERO_CUBE_HEIGHT);
-        }else if (currentLiftState == 1) {
-            goToTargetLiftPos(Ultron.HALF_CUBE_HEIGHT);
-        }else if (currentLiftState == 2) {
-            goToTargetLiftPos(Ultron.ONE_CUBE_HEIGHT);
-        }else if (currentLiftState == 3) {
-            goToTargetLiftPos(Ultron.TWO_CUBE_HEIGHT);
-        }else if (currentLiftState == 4) {
-            goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
+
+        switch (liftState) {
+            case ZERO_CUBE_HEIGHT:
+                goToTargetLiftPos(Ultron.ZERO_CUBE_HEIGHT);
+                break;
+            case HALF_CUBE_HEIGHT:
+                goToTargetLiftPos(Ultron.HALF_CUBE_HEIGHT);
+                break;
+            case ONE_CUBE_HEIGHT:
+                goToTargetLiftPos(Ultron.ONE_CUBE_HEIGHT);
+                break;
+            case TWO_CUBE_HEIGHT:
+                goToTargetLiftPos(Ultron.TWO_CUBE_HEIGHT);
+                break;
+            case THREE_CUBE_HEIGHT:
+                goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
+                break;
         }
         dPadWasUp = gamepadToUse.dpad_up;
         dPadWasDown = gamepadToUse.dpad_down;
