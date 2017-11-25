@@ -7,6 +7,10 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.SubSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * Created by Julian on 11/14/2017.
  */
@@ -47,8 +51,8 @@ public class DriveSystem extends SubSystem{
         } else {
             slow = false;
         }
-        mecanumNoTrig();
-        displayValues();
+        mecanumTrig();
+        displayPositions();
     }
 
     @Override
@@ -70,7 +74,7 @@ public class DriveSystem extends SubSystem{
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void displayValues() {
+    public void displayPositions() {
         telemetry().addData("Front Right: ", frontRight.getCurrentPosition());
         telemetry().addData("Front Left: ", frontLeft.getCurrentPosition());
         telemetry().addData("Rear Right: ", rearRight.getCurrentPosition());
@@ -115,7 +119,8 @@ public class DriveSystem extends SubSystem{
     }
 
     public void mecanumTrig() {
-        double r = (Math.hypot(gamepad1().left_stick_x, gamepad1().left_stick_y))/Math.sqrt(2);
+        //See http://thinktank.wpi.edu/resources/346/ControllingMecanumDrive.pdf
+        double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
         double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getHeading() + Math.PI / 4;
         double rightX = gamepad1().right_stick_x;
 
@@ -124,15 +129,38 @@ public class DriveSystem extends SubSystem{
         double rearLeftPower = r * Math.cos(robotAngle) + rightX;
         double rearRightPower = r * Math.sin(robotAngle) - rightX;
 
+        ArrayList<Double> powerList = new ArrayList<>();
+        double absMax = 0;
+        powerList.add(frontLeftPower);
+        powerList.add(frontRightPower);
+        powerList.add(rearLeftPower);
+        powerList.add(rearRightPower);
+
+        for (double power:powerList){
+            if (Math.abs(power) > absMax)
+                absMax = Math.abs(power);
+        }
+
+        if (absMax != 0) {
+            for (int i = 0; i < powerList.size(); i++) {
+                powerList.set(i, powerList.get(i) / absMax);
+            }
+        }
+        
+        frontLeftPower = powerList.get(0);
+        frontRightPower = powerList.get(1);
+        rearLeftPower = powerList.get(2);
+        rearRightPower = powerList.get(3);
+
         telemetry().addData("FL Power", frontLeftPower);
         telemetry().addData("FR Power", frontRightPower);
         telemetry().addData("RL Power", rearLeftPower);
         telemetry().addData("RR Power", rearRightPower);
 
-        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0) ;
-        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0) ;
-        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0) ;
-        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0) ;
+        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
+        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
+        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
+        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
 
         if (slow) {
             frontLeft.setPower(frontLeftPower / 2.0);

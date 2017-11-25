@@ -47,7 +47,7 @@ public class SensorSystem extends SubSystem {
 
     @Override
     public void handle() {
-        updateHeading();
+        updateGyro();
 
     }
 
@@ -56,8 +56,8 @@ public class SensorSystem extends SubSystem {
 
     }
 
-    void updateHeading() {
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    void updateGyro() {
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
         heading = angles.firstAngle;
         roll = angles.secondAngle;
         pitch = angles.thirdAngle;
