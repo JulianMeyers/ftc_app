@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.JewelSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.SensorSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
 /**
@@ -58,12 +59,16 @@ public class Ultron extends Robot{
     public static final double LEFT_TOP_SERVO_UP = 0;
     public static final double LEFT_LOWER_SERVO_UP = 0;
 
+    //SensorSystem
+    public static final String IMU_KEY = "IMU";
+
     public SimpleColor ALLIANCE;
 
     public Ultron(OpMode opMode, SimpleColor alliance, Boolean twoDrivers) {
         super(opMode);
         ALLIANCE = alliance;
         TWO_DRIVERS = twoDrivers;
+        putSubSystem("sensor", new SensorSystem(this));
         putSubSystem("drive", new DriveSystem(this));
         putSubSystem("lift", new LiftSystem(this));
         putSubSystem("cube", new CubeSystem(this));

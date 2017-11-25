@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
 public class DriveSystem extends SubSystem{
 
     private DcMotor frontRight, frontLeft, rearRight, rearLeft;
-    //Add sensorSystem here
+    private SensorSystem sensorSystem;
     private boolean slow = false;
 
     public DriveSystem(Robot robot) {
@@ -23,6 +23,8 @@ public class DriveSystem extends SubSystem{
 
     @Override
     public void init() {
+        this.sensorSystem = robot.getSubSystem(SensorSystem.class);
+
         frontLeft = hardwareMap().dcMotor.get(Ultron.DRIVE_FL_KEY);
         rearLeft = hardwareMap().dcMotor.get(Ultron.DRIVE_RL_KEY);
         frontRight = hardwareMap().dcMotor.get(Ultron.DRIVE_FR_KEY);
@@ -104,6 +106,7 @@ public class DriveSystem extends SubSystem{
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+
     public void driveForward(double power) {
         frontLeft.setPower(power);
         rearLeft.setPower(power);
@@ -112,14 +115,19 @@ public class DriveSystem extends SubSystem{
     }
 
     public void mecanumTrig() {
-        double r = Math.hypot(gamepad1().left_stick_x, gamepad1().left_stick_y);
-        double robotAngle = Math.atan2(gamepad1().left_stick_y, gamepad1().left_stick_x) - Math.PI / 4;
-        double rightX = -gamepad1().right_stick_x;
+        double r = (Math.hypot(gamepad1().left_stick_x, gamepad1().left_stick_y))/Math.sqrt(2);
+        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getHeading() + Math.PI / 4;
+        double rightX = gamepad1().right_stick_x;
 
-        double frontLeftPower = r * Math.cos(robotAngle) + rightX;
-        double frontRightPower = r * Math.sin(robotAngle) - rightX;
-        double rearLeftPower = r * Math.sin(robotAngle) + rightX;
-        double rearRightPower = r * Math.cos(robotAngle) - rightX;
+        double frontLeftPower = r * Math.sin(robotAngle) + rightX;
+        double frontRightPower = r * Math.cos(robotAngle) - rightX;
+        double rearLeftPower = r * Math.cos(robotAngle) + rightX;
+        double rearRightPower = r * Math.sin(robotAngle) - rightX;
+
+        telemetry().addData("FL Power", frontLeftPower);
+        telemetry().addData("FR Power", frontRightPower);
+        telemetry().addData("RL Power", rearLeftPower);
+        telemetry().addData("RR Power", rearRightPower);
 
         frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0) ;
         frontRightPower = Range.clip(frontRightPower, -1.0, 1.0) ;
@@ -150,9 +158,21 @@ public class DriveSystem extends SubSystem{
         double frontRightPower = Ch3 - Ch1 - Ch4;
         double rearRightPower = Ch3 - Ch1 + Ch4;
 
-        frontLeft.setPower(frontLeftPower);
-        rearLeft.setPower(rearLeftPower);
-        frontRight.setPower(frontRightPower);
-        rearRight.setPower(rearRightPower);
+        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0) ;
+        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0) ;
+        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0) ;
+        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0) ;
+
+        if (slow) {
+            frontLeft.setPower(frontLeftPower / 2.0);
+            frontRight.setPower(frontRightPower / 2.0);
+            rearLeft.setPower(rearLeftPower / 2.0);
+            rearRight.setPower(rearRightPower / 2.0);
+        } else {
+            frontLeft.setPower(frontLeftPower);
+            frontRight.setPower(frontRightPower);
+            rearLeft.setPower(rearLeftPower);
+            rearRight.setPower(rearRightPower);
+        }
     }
 }
