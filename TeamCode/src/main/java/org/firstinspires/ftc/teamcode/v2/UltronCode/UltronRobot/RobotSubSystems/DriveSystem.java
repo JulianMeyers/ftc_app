@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronOpMode.AutonomousProgram;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.SubSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
@@ -100,6 +101,14 @@ public class DriveSystem extends SubSystem{
         rearLeft.setPower(0);
         frontRight.setPower(0);
         rearRight.setPower(0);
+    }
+
+    /**
+     * resets encoder values and returns to voltage mode
+     */
+    public void resetEncoders() {
+        modeReset();
+        modeVoltage();
     }
 
     /**
@@ -248,6 +257,21 @@ public class DriveSystem extends SubSystem{
         rearRightPower = powerList.get(3);
 
         setPower(frontLeftPower, frontRightPower, rearLeftPower, rearRightPower);
+    }
 
+    /**
+     * turns a number of radians at a set power utilizing the gyro sensor
+     * @param radians positive for right, negative for left, should range between -2pi and 2pi
+     * @param power positive values and will be made positive if not, should rage between 0 and 1
+     * @throws InterruptedException has a while statement that doesn't check if OpMode is active and could get mad
+     */
+    public void gyroTurn(int radians, double power) throws InterruptedException {
+        power = Math.abs(power);
+        double targetRadians = sensorSystem.getHeading() + radians;
+        float direction = Math.signum(radians);
+        driveAngle(0,Math.PI/2, power*direction);
+        while ( Math.abs(targetRadians-sensorSystem.getHeading()) < Math.abs(targetRadians)){}
+        stopMotors();
+        resetEncoders();
     }
 }

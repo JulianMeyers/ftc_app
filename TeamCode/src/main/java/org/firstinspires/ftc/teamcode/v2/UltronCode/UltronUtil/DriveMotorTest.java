@@ -25,7 +25,7 @@ public class DriveMotorTest extends UltronAuto {
         sleep(60000);
         driveSystem.driveForward(0);
         while (opModeIsActive()) {
-            driveSystem.displayValues();
+            driveSystem.displayPositions();
             telemetry.update();
         }
     }
