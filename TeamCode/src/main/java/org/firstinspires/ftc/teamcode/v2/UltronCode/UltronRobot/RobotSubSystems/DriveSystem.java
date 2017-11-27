@@ -233,12 +233,12 @@ public class DriveSystem extends SubSystem{
         double rearLeftPower = inPower * Math.cos(robotAngle) + turnAmount;
         double rearRightPower = inPower * Math.sin(robotAngle) - turnAmount;
 
-        ArrayList<Double> powerList = new ArrayList<>();
+        double[] powerList = new double[4];
         double absMax = 0;
-        powerList.add(frontLeftPower);
-        powerList.add(frontRightPower);
-        powerList.add(rearLeftPower);
-        powerList.add(rearRightPower);
+        powerList[0] = frontLeftPower;
+        powerList[1] = frontRightPower;
+        powerList[2] = rearLeftPower;
+        powerList[3] = rearRightPower;
 
         for (double power:powerList){
             if (Math.abs(power) > absMax)
@@ -246,15 +246,15 @@ public class DriveSystem extends SubSystem{
         }
 
         if (absMax > 1) {
-            for (int i = 0; i < powerList.size(); i++) {
-                powerList.set(i, powerList.get(i) / absMax);
+            for (int i = 0; i < powerList.length; i++) {
+                powerList[i] /= absMax;
             }
         }
 
-        frontLeftPower = powerList.get(0);
-        frontRightPower = powerList.get(1);
-        rearLeftPower = powerList.get(2);
-        rearRightPower = powerList.get(3);
+        frontLeftPower = powerList[0];
+        frontRightPower = powerList[1];
+        rearLeftPower = powerList[2];
+        rearRightPower = powerList[3];
 
         setPower(frontLeftPower, frontRightPower, rearLeftPower, rearRightPower);
     }
