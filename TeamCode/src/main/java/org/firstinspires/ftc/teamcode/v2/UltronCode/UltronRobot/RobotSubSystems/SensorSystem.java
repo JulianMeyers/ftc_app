@@ -75,7 +75,7 @@ public class SensorSystem extends SubSystem {
         return pitch;
     }
 
-    public double displayValues() {
+    public void displayValues() {
         telemetry().addLine().addData("Heading", heading);
         telemetry().addLine().addData("Roll", roll);
         telemetry().addLine().addData("Pitch", pitch);
