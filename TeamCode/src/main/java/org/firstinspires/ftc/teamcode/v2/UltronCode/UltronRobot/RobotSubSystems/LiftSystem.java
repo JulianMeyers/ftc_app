@@ -12,8 +12,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
  */
 
 public class LiftSystem extends SubSystem {
-    private DcMotor rightLiftMotor;
-    private DcMotor leftLiftMotor;
+    private DcMotor rightLiftMotor, leftLiftMotor;
 
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
@@ -103,7 +102,7 @@ public class LiftSystem extends SubSystem {
         if (difference > 20) {
             setLifPower(-0.5);
         }else if (difference < -20) {
-            setLifPower(0.75);
+            setLifPower(1);
         }
     }
 
