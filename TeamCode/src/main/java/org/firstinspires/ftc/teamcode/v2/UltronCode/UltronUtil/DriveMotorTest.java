@@ -21,8 +21,8 @@ public class DriveMotorTest extends UltronAuto {
         driveSystem.modeReset();
         driveSystem.modeVoltage();
         driveSystem.brakeMode();
-        driveSystem.driveForward(1);
-        sleep(1000);
+        driveSystem.driveForward(-0.25);
+        sleep(60000);
         driveSystem.driveForward(0);
         while (opModeIsActive()) {
             driveSystem.displayValues();

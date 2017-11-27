@@ -15,7 +15,6 @@ public class LiftSystem extends SubSystem {
     private DcMotor rightLiftMotor;
     private DcMotor leftLiftMotor;
 
-    public int currentLiftState = 0;
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
 
