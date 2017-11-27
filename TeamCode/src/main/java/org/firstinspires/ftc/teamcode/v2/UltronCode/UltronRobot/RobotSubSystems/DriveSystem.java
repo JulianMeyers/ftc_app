@@ -236,7 +236,7 @@ public class DriveSystem extends SubSystem{
                 absMax = Math.abs(power);
         }
 
-        if (absMax != 0) {
+        if (absMax > 1) {
             for (int i = 0; i < powerList.size(); i++) {
                 powerList.set(i, powerList.get(i) / absMax);
             }
