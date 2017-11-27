@@ -50,4 +50,8 @@ public abstract class AutonomousProgram extends LinearOpMode{
         long stopTime = System.currentTimeMillis() + (int) (seconds * 1000);
         while(opModeIsActive() && System.currentTimeMillis() < stopTime) {}
     }
+
+    protected final void waitForCondition(boolean condition) {
+        while (opModeIsActive() && !condition) {}
+    }
 }

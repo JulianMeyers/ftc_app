@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
@@ -51,7 +52,7 @@ public class DriveSystem extends SubSystem{
         } else {
             slow = false;
         }
-        mecanumTrig();
+        mecanumTrigPlayer();
         displayPositions();
     }
 
@@ -60,6 +61,9 @@ public class DriveSystem extends SubSystem{
         stopMotors();
     }
 
+    /**
+     * floatMode will set motors to float when motor power is set to 0
+     */
     public void floatMode() {
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -67,6 +71,9 @@ public class DriveSystem extends SubSystem{
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
+    /**
+     * brakeMode will set motors to brake when motor power is set to 0
+     */
     public void brakeMode() {
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -74,6 +81,9 @@ public class DriveSystem extends SubSystem{
         rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    /**
+     * displayPositions will display the current encoder values
+     */
     public void displayPositions() {
         telemetry().addData("Front Right: ", frontRight.getCurrentPosition());
         telemetry().addData("Front Left: ", frontLeft.getCurrentPosition());
@@ -81,6 +91,9 @@ public class DriveSystem extends SubSystem{
         telemetry().addData("Rear Left: ", rearLeft.getCurrentPosition());
     }
 
+    /**
+     * stopMotors will set motors to brake and then sets motor power to 0
+     */
     public void stopMotors() {
         brakeMode();
         frontLeft.setPower(0);
@@ -89,6 +102,9 @@ public class DriveSystem extends SubSystem{
         rearRight.setPower(0);
     }
 
+    /**
+     * modeVoltage sets all drive motors to RUN_WITHOUT_ENCODERs
+     */
     public void modeVoltage() {
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -96,6 +112,9 @@ public class DriveSystem extends SubSystem{
         rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    /**
+     * modeSpeed sets all drive motors to RUN_USING_ENCODERs
+     */
     public void modeSpeed() {
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -103,6 +122,9 @@ public class DriveSystem extends SubSystem{
         rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    /**
+     * modeReset resets all drive encoder values
+     */
     public void modeReset() {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -110,7 +132,10 @@ public class DriveSystem extends SubSystem{
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-
+    /**
+     * driveForward drives directly forward at the given power
+     * @param power
+     */
     public void driveForward(double power) {
         frontLeft.setPower(power);
         rearLeft.setPower(power);
@@ -118,16 +143,86 @@ public class DriveSystem extends SubSystem{
         rearRight.setPower(power);
     }
 
-    public void mecanumTrig() {
+    /**
+     * mecanumTrigPlayer takes joystick values and sets robot to drive at an angle based on it
+     * the drive is based on player perspective, not robot perspective
+     */
+    public void mecanumTrigPlayer() {
         //See http://thinktank.wpi.edu/resources/346/ControllingMecanumDrive.pdf
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
         double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getHeading() + Math.PI / 4;
         double rightX = gamepad1().right_stick_x;
 
-        double frontLeftPower = r * Math.sin(robotAngle) + rightX;
-        double frontRightPower = r * Math.cos(robotAngle) - rightX;
-        double rearLeftPower = r * Math.cos(robotAngle) + rightX;
-        double rearRightPower = r * Math.sin(robotAngle) - rightX;
+        driveAngle(r, robotAngle, rightX);
+    }
+
+    /**
+     * mecanumTrigRobot takes joystick values and sets robot to drive at an angle based on it
+     * the drive is based on robot perspective, not player perspective
+     */
+    public void mecanumTrigRobot() {
+        double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
+        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y) + Math.PI / 4;
+        double rightX = gamepad1().right_stick_x;
+
+        driveAngle(r, robotAngle, rightX);
+    }
+
+    /**
+     * mecanumNoTrig will take joystick values and then set robot power accordingly, this does not
+     * use any trig and also does not factor robot orientation into it
+     */
+    public void mecanumNoTrig() {
+        double Ch1 = -gamepad1().right_stick_x;
+        double Ch3 = gamepad1().left_stick_y;
+        double Ch4 = gamepad1().left_stick_x;
+
+        double frontLeftPower = Ch3 + Ch1 + Ch4;
+        double rearLeftPower = Ch3 + Ch1 - Ch4;
+        double frontRightPower = Ch3 - Ch1 - Ch4;
+        double rearRightPower = Ch3 - Ch1 + Ch4;
+
+        setPower(frontLeftPower, frontRightPower, rearLeftPower, rearRightPower);
+    }
+
+    /**
+     * setPower sets the power of all the motors to their set power and will clip values if they
+     * are greater than 1 or less than -1
+     * @param frontLeftPower should range from about 1 to -1, but can differ
+     * @param frontRightPower should range from about 1 to -1, but can differ
+     * @param rearLeftPower should range from about 1 to -1, but can differ
+     * @param rearRightPower should range from about 1 to -1, but can differ
+     */
+    public void setPower(double frontLeftPower, double frontRightPower, double rearLeftPower, double rearRightPower) {
+        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0) ;
+        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0) ;
+        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0) ;
+        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0) ;
+
+        if (slow) {
+            frontLeft.setPower(frontLeftPower / 2.0);
+            frontRight.setPower(frontRightPower / 2.0);
+            rearLeft.setPower(rearLeftPower / 2.0);
+            rearRight.setPower(rearRightPower / 2.0);
+        } else {
+            frontLeft.setPower(frontLeftPower);
+            frontRight.setPower(frontRightPower);
+            rearLeft.setPower(rearLeftPower);
+            rearRight.setPower(rearRightPower);
+        }
+    }
+
+    /**
+     * driveAngle will set robot to go in target direction at target power and will turn at turn power
+     * @param inPower ranges between -1 and 1 and is the strength of the robot's movement
+     * @param robotAngle takes a value in radians, this should factor in robot position
+     * @param turnAmount takes a value between -1 and 1 which should give power of turn
+     */
+    public void driveAngle(double inPower, double robotAngle, double turnAmount) {
+        double frontLeftPower = inPower * Math.sin(robotAngle) + turnAmount;
+        double frontRightPower = inPower * Math.cos(robotAngle) - turnAmount;
+        double rearLeftPower = inPower * Math.cos(robotAngle) + turnAmount;
+        double rearRightPower = inPower * Math.sin(robotAngle) - turnAmount;
 
         ArrayList<Double> powerList = new ArrayList<>();
         double absMax = 0;
@@ -146,61 +241,13 @@ public class DriveSystem extends SubSystem{
                 powerList.set(i, powerList.get(i) / absMax);
             }
         }
-        
+
         frontLeftPower = powerList.get(0);
         frontRightPower = powerList.get(1);
         rearLeftPower = powerList.get(2);
         rearRightPower = powerList.get(3);
 
-        telemetry().addData("FL Power", frontLeftPower);
-        telemetry().addData("FR Power", frontRightPower);
-        telemetry().addData("RL Power", rearLeftPower);
-        telemetry().addData("RR Power", rearRightPower);
+        setPower(frontLeftPower, frontRightPower, rearLeftPower, rearRightPower);
 
-        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0);
-        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0);
-        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0);
-        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0);
-
-        if (slow) {
-            frontLeft.setPower(frontLeftPower / 2.0);
-            frontRight.setPower(frontRightPower / 2.0);
-            rearLeft.setPower(rearLeftPower / 2.0);
-            rearRight.setPower(rearRightPower / 2.0);
-        } else {
-            frontLeft.setPower(frontLeftPower);
-            frontRight.setPower(frontRightPower);
-            rearLeft.setPower(rearLeftPower);
-            rearRight.setPower(rearRightPower);
-        }
-
-    }
-
-    public void mecanumNoTrig() {
-        double Ch1 = -gamepad1().right_stick_x;
-        double Ch3 = gamepad1().left_stick_y;
-        double Ch4 = gamepad1().left_stick_x;
-
-        double frontLeftPower = Ch3 + Ch1 + Ch4;
-        double rearLeftPower = Ch3 + Ch1 - Ch4;
-        double frontRightPower = Ch3 - Ch1 - Ch4;
-        double rearRightPower = Ch3 - Ch1 + Ch4;
-
-        frontLeftPower = Range.clip(frontLeftPower, -1.0, 1.0) ;
-        frontRightPower = Range.clip(frontRightPower, -1.0, 1.0) ;
-        rearLeftPower = Range.clip(rearLeftPower, -1.0, 1.0) ;
-        rearRightPower = Range.clip(rearRightPower, -1.0, 1.0) ;
-
-        if (slow) {
-            frontLeft.setPower(frontLeftPower / 2.0);
-            frontRight.setPower(frontRightPower / 2.0);
-            rearLeft.setPower(rearLeftPower / 2.0);
-            rearRight.setPower(rearRightPower / 2.0);
-        } else {
-            frontLeft.setPower(frontLeftPower);
-            frontRight.setPower(frontRightPower);
-            rearLeft.setPower(rearLeftPower);
-            rearRight.setPower(rearRightPower);
-        }
     }
 }
