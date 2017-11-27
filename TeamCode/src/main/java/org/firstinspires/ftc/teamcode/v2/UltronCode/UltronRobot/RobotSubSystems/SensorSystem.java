@@ -48,7 +48,7 @@ public class SensorSystem extends SubSystem {
     @Override
     public void handle() {
         updateGyro();
-
+        displayValues();
     }
 
     @Override
@@ -73,5 +73,11 @@ public class SensorSystem extends SubSystem {
 
     public double getPitch() {
         return pitch;
+    }
+
+    public double displayValues() {
+        telemetry().addLine().addData("Heading", heading);
+        telemetry().addLine().addData("Roll", roll);
+        telemetry().addLine().addData("Pitch", pitch);
     }
 }
