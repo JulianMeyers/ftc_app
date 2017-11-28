@@ -265,12 +265,12 @@ public class DriveSystem extends SubSystem{
      * @param power positive values and will be made positive if not, should rage between 0 and 1
      * @throws InterruptedException has a while statement that doesn't check if OpMode is active and could get mad
      */
-    public void gyroTurn(int radians, double power) throws InterruptedException {
+    public void gyroTurn(double radians, double power) throws InterruptedException {
         power = Math.abs(power);
-        double targetRadians = sensorSystem.getHeading() + radians;
-        float direction = Math.signum(radians);
+        double initialAngle = sensorSystem.getHeading();
+        double direction = Math.signum(radians);
         driveAngle(0,Math.PI/2, power*direction);
-        while ( Math.abs(targetRadians-sensorSystem.getHeading()) < Math.abs(targetRadians)){}
+        while (Math.abs(initialAngle-sensorSystem.getHeading()) < Math.abs(radians)){}
         stopMotors();
         resetEncoders();
     }
