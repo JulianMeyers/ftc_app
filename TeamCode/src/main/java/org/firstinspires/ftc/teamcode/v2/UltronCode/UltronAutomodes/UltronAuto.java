@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.JewelSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.SensorSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
@@ -18,6 +19,7 @@ public abstract class UltronAuto extends AutonomousProgram{
     public LiftSystem liftSystem;
     public CubeSystem cubeSystem;
     public JewelSystem jewelSystem;
+    public SensorSystem sensorSystem;
 
     private SimpleColor alliance;
 
@@ -30,6 +32,7 @@ public abstract class UltronAuto extends AutonomousProgram{
         liftSystem = (LiftSystem)ultron.getSubSystem("lift");
         cubeSystem = (CubeSystem)ultron.getSubSystem("cube");
         jewelSystem = (JewelSystem)ultron.getSubSystem("jewel");
+        sensorSystem = (SensorSystem)ultron.getSubSystem("sensors");
         return ultron;
     }
 }

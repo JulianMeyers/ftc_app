@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -25,6 +28,10 @@ public class SensorSystem extends SubSystem {
     private double roll;
     private double pitch;
 
+    // Color sensor defs
+    private ColorSensor rightColorSensor;
+    private ColorSensor leftColorSensor;
+
     public SensorSystem(Robot robot) {
         super(robot);
     }
@@ -43,6 +50,10 @@ public class SensorSystem extends SubSystem {
         imu.initialize(parameters);
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+
+        rightColorSensor = hardwareMap().colorSensor.get(Ultron.RIGHT_COLOR_SENSOR_KEY);
+        leftColorSensor = hardwareMap().colorSensor.get(Ultron.LEFT_COLOR_SENSOR_KEY);
+
     }
 
     @Override
@@ -61,6 +72,14 @@ public class SensorSystem extends SubSystem {
         heading = angles.firstAngle;
         roll = angles.secondAngle;
         pitch = angles.thirdAngle;
+    }
+
+    public int[] getRightColorSensorData() {
+        return new int[]{rightColorSensor.red(),rightColorSensor.blue()};
+    }
+
+    public int[] getLeftColorSensorData() {
+        return new int[]{leftColorSensor.red(),leftColorSensor.blue()};
     }
 
     public double getYaw() {

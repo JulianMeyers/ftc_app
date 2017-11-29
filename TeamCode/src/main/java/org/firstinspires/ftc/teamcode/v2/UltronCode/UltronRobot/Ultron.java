@@ -61,6 +61,8 @@ public class Ultron extends Robot{
 
     //SensorSystem
     public static final String IMU_KEY = "IMU";
+    public static final String RIGHT_COLOR_SENSOR_KEY = "RCS";
+    public static final String LEFT_COLOR_SENSOR_KEY = "LCS";
 
     public SimpleColor ALLIANCE;
 

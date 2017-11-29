@@ -9,11 +9,17 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 /**
  * Created by Julian on 11/15/2017.
  */
-@Autonomous(name = "BlueAuto1")
-public class BlueAuto1 extends UltronAutoBlue{
+@Autonomous(name = "BlueAutoCorner1")
+public class BlueAutoCorner1 extends UltronAutoBlue{
 
     @Override
     public void main() {
         //Do stuff
+
+        jewelSystem.leftDown();
+
+        int LCSRed = sensorSystem.getLeftColorSensorData()[0];
+        int LCSBlue = sensorSystem.getLeftColorSensorData()[1];
+
     }
 }
