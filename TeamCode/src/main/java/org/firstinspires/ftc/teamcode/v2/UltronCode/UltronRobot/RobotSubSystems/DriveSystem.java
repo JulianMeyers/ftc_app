@@ -1,17 +1,11 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronOpMode.AutonomousProgram;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.SubSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Created by Julian on 11/14/2017.
@@ -159,7 +153,7 @@ public class DriveSystem extends SubSystem{
     public void mecanumTrigPlayer() {
         //See http://thinktank.wpi.edu/resources/346/ControllingMecanumDrive.pdf
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
-        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getHeading() + Math.PI / 4;
+        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getYaw() + Math.PI / 4;
         double rightX = gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
@@ -267,10 +261,10 @@ public class DriveSystem extends SubSystem{
      */
     public void gyroTurn(int radians, double power) throws InterruptedException {
         power = Math.abs(power);
-        double targetRadians = sensorSystem.getHeading() + radians;
+        double targetRadians = sensorSystem.getYaw() + radians;
         float direction = Math.signum(radians);
         driveAngle(0,Math.PI/2, power*direction);
-        while ( Math.abs(targetRadians-sensorSystem.getHeading()) < Math.abs(targetRadians)){}
+        while ( Math.abs(targetRadians-sensorSystem.getYaw()) < Math.abs(targetRadians)){}
         stopMotors();
         resetEncoders();
     }

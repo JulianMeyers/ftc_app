@@ -63,7 +63,7 @@ public class SensorSystem extends SubSystem {
         pitch = angles.thirdAngle;
     }
 
-    public double getHeading() {
+    public double getYaw() {
         return heading;
     }
 
