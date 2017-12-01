@@ -81,7 +81,7 @@ public class RedAutoCorner1 extends UltronAutoRed {
         //Go to forwards correct amount based on cryptoboxkey
         //Gyroturn right 90 degrees probably
         //Go forwards time(to ensure that we get as close as possible to making it in
-        
+
 
     }
 }
