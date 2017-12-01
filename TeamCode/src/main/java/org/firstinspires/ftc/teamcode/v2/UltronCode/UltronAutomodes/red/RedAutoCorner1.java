@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red;
 import android.hardware.Sensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -69,6 +70,8 @@ public class RedAutoCorner1 extends UltronAutoRed {
 
         if (RCSRed > RCSBlue) {
             // go backwards
+            while ()
+            driveSystem.driveForward(-1.0);
             //raise arm
             //go forwards
         } else if (RCSBlue > RCSRed){
