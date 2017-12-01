@@ -69,9 +69,9 @@ public class SensorSystem extends SubSystem {
 
     void updateGyro() {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-        heading = angles.firstAngle;
-        roll = angles.secondAngle;
-        pitch = angles.thirdAngle;
+        heading = (angles.firstAngle)%(2*Math.PI);
+        roll = (angles.secondAngle)%(2*Math.PI);
+        pitch = (angles.thirdAngle)%(2*Math.PI);
     }
 
     public int[] getRightColorSensorData() {

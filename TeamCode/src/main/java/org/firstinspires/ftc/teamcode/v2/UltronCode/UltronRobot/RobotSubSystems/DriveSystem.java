@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.General.Robot;
@@ -47,8 +48,16 @@ public class DriveSystem extends SubSystem{
         } else {
             slow = false;
         }
-        mecanumTrigPlayer();
+        if (!gamepad1().left_bumper) {
+            mecanumTrigPlayer();
+        } else {
+            mecanumTrigRobot();
+        }
         displayPositions();
+        telemetry().addData("Target Angle", Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y));
+        telemetry().addData("Current Angle", sensorSystem.getYaw());
+        telemetry().addData("Robot Move Angle", Math.atan2(gamepad1().left_stick_x, -gamepad1().left_stick_y) - sensorSystem.getYaw());
+
     }
 
     @Override
@@ -152,8 +161,8 @@ public class DriveSystem extends SubSystem{
      */
     public void mecanumTrigPlayer() {
         //See http://thinktank.wpi.edu/resources/346/ControllingMecanumDrive.pdf
-        double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
-        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getYaw() + Math.PI / 4;
+        double r = (Math.hypot(gamepad1().left_stick_x, gamepad1().left_stick_y))/Math.sqrt(2);
+        double robotAngle = Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y)  - sensorSystem.getYaw() + Math.PI / 4;
         double rightX = gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
@@ -165,8 +174,8 @@ public class DriveSystem extends SubSystem{
      */
     public void mecanumTrigRobot() {
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
-        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y) + Math.PI / 4;
-        double rightX = gamepad1().right_stick_x;
+        double robotAngle = Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y) + Math.PI / 4;
+        double rightX = -gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
     }
