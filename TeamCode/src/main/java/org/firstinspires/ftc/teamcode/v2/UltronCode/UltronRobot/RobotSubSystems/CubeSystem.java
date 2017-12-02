@@ -25,10 +25,10 @@ public class CubeSystem extends SubSystem {
     public void init() {
         rightTopServo = hardwareMap().servo.get(Ultron.RIGHT_TOP_SERVO_KEY);
         leftTopServo = hardwareMap().servo.get(Ultron.LEFT_TOP_SERVO_KEY);
-        rightLowerServo = hardwareMap().servo.get(Ultron.RIGHT_LOWER_SERVO_KEY);
-        leftLowerServo = hardwareMap().servo.get(Ultron.LEFT_LOWER_SERVO_KEY);
+//        rightLowerServo = hardwareMap().servo.get(Ultron.RIGHT_LOWER_SERVO_KEY);
+//        leftLowerServo = hardwareMap().servo.get(Ultron.LEFT_LOWER_SERVO_KEY);
         openTop();
-        openLower();
+//        openLower();
     }
 
     @Override
@@ -42,12 +42,12 @@ public class CubeSystem extends SubSystem {
                 closeTop();
             }
 
-            if (gamepad2().dpad_left) {
-                openLower();
-            }
-            if (gamepad2().dpad_right) {
-                closeLower();
-            }
+//            if (gamepad2().dpad_left) {
+//                openLower();
+//            }
+//            if (gamepad2().dpad_right) {
+//                closeLower();
+//            }
         }else {
             if (gamepad1().b) {
                 openTop();
@@ -57,19 +57,19 @@ public class CubeSystem extends SubSystem {
                 closeTop();
             }
 
-            if (gamepad1().dpad_left) {
-                openLower();
-            }
-            if (gamepad1().dpad_right) {
-                closeLower();
-            }
+//            if (gamepad1().dpad_left) {
+//                openLower();
+//            }
+//            if (gamepad1().dpad_right) {
+//                closeLower();
+//            }
         }
     }
 
     @Override
     public void stop() {
         openTop();
-        openLower();
+//        openLower();
     }
 
     public void openTop() {
@@ -82,13 +82,13 @@ public class CubeSystem extends SubSystem {
         leftTopServo.setPosition(Ultron.LEFT_TOP_SERVO_CLOSED);
     }
 
-    public void openLower() {
-        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_OPEN);
-        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_OPEN);
-    }
-
-    public void closeLower() {
-        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_CLOSED);
-        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_CLOSED);
-    }
+//    public void openLower() {
+//        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_OPEN);
+//        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_OPEN);
+//    }
+//
+//    public void closeLower() {
+//        rightLowerServo.setPosition(Ultron.RIGHT_LOWER_SERVO_CLOSED);
+//        leftLowerServo.setPosition(Ultron.LEFT_LOWER_SERVO_CLOSED);
+//    }
 }

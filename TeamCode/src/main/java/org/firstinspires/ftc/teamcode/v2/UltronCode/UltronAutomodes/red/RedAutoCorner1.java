@@ -1,18 +1,9 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red;
 
-import android.hardware.Sensor;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
-
-import java.util.Collections;
 
 /**
  * Created by Julian on 11/15/2017.
@@ -63,8 +54,8 @@ public class RedAutoCorner1 extends UltronAutoRed {
 
         jewelSystem.rightDown();
 
-        int RCSRed = sensorSystem.getRightColorSensorData()[0];
-        int RCSBlue = sensorSystem.getRightColorSensorData()[1];
+        int RCSRed = sensorSystem.getColorSensorData()[0];
+        int RCSBlue = sensorSystem.getColorSensorData()[1];
 
         // Assuming color sensor is facing forwards...
 

@@ -16,13 +16,15 @@ public class GyroTurnTest extends UltronAuto {
 
     @Override
     public void main() {
-        try {
-            driveSystem.gyroTurn(Math.PI/2,0.5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sensorSystem.updateGyro();
+        double initialTurn = sensorSystem.getYaw();
+        double finalTurn = turn(Math.PI/2, 0.5);
         while (opModeIsActive()) {
-            telemetry.addData("Heading", sensorSystem.getYaw());
+            telemetry.addData("Initial Yaw", Math.toDegrees(initialTurn));
+            telemetry.addData("Final Yaw", Math.toDegrees(finalTurn));
+            sensorSystem.updateGyro();
+            telemetry.addData("Actual Yaw", Math.toDegrees(sensorSystem.getYaw()));
+            telemetry.update();
         }
     }
 }

@@ -27,8 +27,7 @@ public class SensorSystem extends SubSystem {
     private double pitch;
 
     // Color sensor defs
-    private ColorSensor rightColorSensor;
-    private ColorSensor leftColorSensor;
+    private ColorSensor colorSensor;
 
     public SensorSystem(Robot robot) {
         super(robot);
@@ -49,8 +48,7 @@ public class SensorSystem extends SubSystem {
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-        rightColorSensor = hardwareMap().colorSensor.get(Ultron.RIGHT_COLOR_SENSOR_KEY);
-        leftColorSensor = hardwareMap().colorSensor.get(Ultron.LEFT_COLOR_SENSOR_KEY);
+        colorSensor = hardwareMap().colorSensor.get(Ultron.COLOR_SENSOR_KEY);
 
     }
 
@@ -65,19 +63,15 @@ public class SensorSystem extends SubSystem {
 
     }
 
-    void updateGyro() {
+    public void updateGyro() {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-        yaw = (angles.firstAngle)%(2*Math.PI);
-        roll = (angles.secondAngle)%(2*Math.PI);
-        pitch = (angles.thirdAngle)%(2*Math.PI);
+        yaw = (angles.firstAngle + Math.PI*2)%(2*Math.PI);
+        roll = (angles.secondAngle + Math.PI*2)%(2*Math.PI);
+        pitch = (angles.thirdAngle + Math.PI*2)%(2*Math.PI);
     }
 
-    public int[] getRightColorSensorData() {
-        return new int[]{rightColorSensor.red(),rightColorSensor.blue()};
-    }
-
-    public int[] getLeftColorSensorData() {
-        return new int[]{leftColorSensor.red(),leftColorSensor.blue()};
+    public int[] getColorSensorData() {
+        return new int[]{colorSensor.red(), colorSensor.blue()};
     }
 
     public double getYaw() {

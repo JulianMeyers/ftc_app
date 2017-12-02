@@ -31,7 +31,6 @@ public abstract class AutonomousProgram extends LinearOpMode{
             telemetry.addData("Error with init", ex.getMessage());
             ex.printStackTrace();
         }
-        telemetry.update();
 
         waitForStart();
 
@@ -40,8 +39,8 @@ public abstract class AutonomousProgram extends LinearOpMode{
         } catch(Exception ex) {
             telemetry.addData("Error with main", ex.getMessage());
             ex.printStackTrace();
-            telemetry.update();
         }
+        telemetry.update();
     }
 
     protected final Robot getRobot() {return robot;}

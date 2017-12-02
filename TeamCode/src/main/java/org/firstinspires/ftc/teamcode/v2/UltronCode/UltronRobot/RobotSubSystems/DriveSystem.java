@@ -173,7 +173,7 @@ public class DriveSystem extends SubSystem{
     public void mecanumTrigRobot() {
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
         double robotAngle = Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y) + Math.PI / 4;
-        double rightX = -gamepad1().right_stick_x;
+        double rightX = gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
     }
@@ -229,10 +229,10 @@ public class DriveSystem extends SubSystem{
      * @param turnAmount takes a value between -1 and 1 which should give power of turn
      */
     public void driveAngle(double inPower, double robotAngle, double turnAmount) {
-        double frontLeftPower = inPower * Math.sin(robotAngle) + turnAmount;
-        double frontRightPower = inPower * Math.cos(robotAngle) - turnAmount;
-        double rearLeftPower = inPower * Math.cos(robotAngle) + turnAmount;
-        double rearRightPower = inPower * Math.sin(robotAngle) - turnAmount;
+        double frontLeftPower = inPower * Math.sin(robotAngle) - turnAmount;
+        double frontRightPower = inPower * Math.cos(robotAngle) + turnAmount;
+        double rearLeftPower = inPower * Math.cos(robotAngle) - turnAmount;
+        double rearRightPower = inPower * Math.sin(robotAngle) + turnAmount;
 
         double[] powerList = new double[4];
         double absMax = 0;
@@ -268,10 +268,11 @@ public class DriveSystem extends SubSystem{
      */
     public void gyroTurn(double radians, double power) throws InterruptedException {
         power = Math.abs(power);
-        double initialAngle = sensorSystem.getYaw();
         double direction = Math.signum(radians);
+        radians = radians%(Math.PI*2);
+        double initialAngle = sensorSystem.getYaw();
         driveAngle(0,Math.PI/2, power*direction);
-        while (Math.abs(initialAngle-sensorSystem.getYaw()) < Math.abs(radians)){}
+        while (Math.abs(initialAngle-sensorSystem.getYaw()) < Math.abs(radians)){sensorSystem.updateGyro();}
         stopMotors();
         resetEncoders();
     }

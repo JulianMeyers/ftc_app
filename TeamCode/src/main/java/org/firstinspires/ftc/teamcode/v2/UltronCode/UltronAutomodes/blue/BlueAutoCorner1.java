@@ -18,8 +18,5 @@ public class BlueAutoCorner1 extends UltronAutoBlue{
 
         jewelSystem.leftDown();
 
-        int LCSRed = sensorSystem.getLeftColorSensorData()[0];
-        int LCSBlue = sensorSystem.getLeftColorSensorData()[1];
-
     }
 }
