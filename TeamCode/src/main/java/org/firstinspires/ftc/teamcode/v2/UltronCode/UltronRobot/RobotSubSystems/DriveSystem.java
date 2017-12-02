@@ -48,16 +48,14 @@ public class DriveSystem extends SubSystem{
         } else {
             slow = false;
         }
-        if (!gamepad1().left_bumper) {
-            mecanumTrigPlayer();
-        } else {
+        if (gamepad1().right_bumper) {
             mecanumTrigRobot();
+        } else if (gamepad1().left_bumper) {
+            mecanumNoTrig();
+        } else {
+            mecanumTrigPlayer();
         }
         displayPositions();
-        telemetry().addData("Target Angle", Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y));
-        telemetry().addData("Current Angle", sensorSystem.getYaw());
-        telemetry().addData("Robot Move Angle", Math.atan2(gamepad1().left_stick_x, -gamepad1().left_stick_y) - sensorSystem.getYaw());
-
     }
 
     @Override
@@ -89,10 +87,10 @@ public class DriveSystem extends SubSystem{
      * displayPositions will display the current encoder values
      */
     public void displayPositions() {
-        telemetry().addData("Front Right: ", frontRight.getCurrentPosition());
-        telemetry().addData("Front Left: ", frontLeft.getCurrentPosition());
-        telemetry().addData("Rear Right: ", rearRight.getCurrentPosition());
-        telemetry().addData("Rear Left: ", rearLeft.getCurrentPosition());
+        telemetry().addData("Front Right", frontRight.getCurrentPosition());
+        telemetry().addData("Front Left", frontLeft.getCurrentPosition());
+        telemetry().addData("Rear Right", rearRight.getCurrentPosition());
+        telemetry().addData("Rear Left", rearLeft.getCurrentPosition());
     }
 
     /**

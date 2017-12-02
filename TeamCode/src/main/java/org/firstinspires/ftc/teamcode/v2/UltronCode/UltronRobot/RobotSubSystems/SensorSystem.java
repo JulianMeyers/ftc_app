@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
-import android.graphics.Color;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -24,7 +22,7 @@ public class SensorSystem extends SubSystem {
 
     private BNO055IMU imu;
     private Orientation angles;
-    private double heading;
+    private double yaw;
     private double roll;
     private double pitch;
 
@@ -69,7 +67,7 @@ public class SensorSystem extends SubSystem {
 
     void updateGyro() {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-        heading = (angles.firstAngle)%(2*Math.PI);
+        yaw = (angles.firstAngle)%(2*Math.PI);
         roll = (angles.secondAngle)%(2*Math.PI);
         pitch = (angles.thirdAngle)%(2*Math.PI);
     }
@@ -83,7 +81,7 @@ public class SensorSystem extends SubSystem {
     }
 
     public double getYaw() {
-        return heading;
+        return yaw;
     }
 
     public double getRoll() {
@@ -95,7 +93,7 @@ public class SensorSystem extends SubSystem {
     }
 
     public void displayValues() {
-        telemetry().addData("Heading", heading);
+        telemetry().addData("Yaw", yaw);
         telemetry().addData("Roll", roll);
         telemetry().addData("Pitch", pitch);
     }

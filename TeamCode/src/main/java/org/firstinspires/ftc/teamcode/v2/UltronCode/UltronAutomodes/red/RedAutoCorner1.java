@@ -70,7 +70,7 @@ public class RedAutoCorner1 extends UltronAutoRed {
 
         if (RCSRed > RCSBlue) {
             // go backwards
-            while ()
+            //while ()
             driveSystem.driveForward(-1.0);
             //raise arm
             //go forwards
