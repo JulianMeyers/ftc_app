@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
@@ -31,13 +32,12 @@ public class DriveSystem extends SubSystem{
         frontRight = hardwareMap().dcMotor.get(Ultron.DRIVE_FR_KEY);
         rearRight = hardwareMap().dcMotor.get(Ultron.DRIVE_RR_KEY);
 
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        rearLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        rearRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        rearLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        rearRight.setDirection(DcMotor.Direction.FORWARD);
 
-        modeReset();
-        modeVoltage();
+        resetEncoders();
         floatMode();
     }
 
@@ -54,6 +54,9 @@ public class DriveSystem extends SubSystem{
             mecanumNoTrig();
         } else {
             mecanumTrigPlayer();
+        }
+        if (gamepad1().left_stick_button) {
+            resetEncoders();
         }
         displayPositions();
     }
@@ -159,9 +162,9 @@ public class DriveSystem extends SubSystem{
      */
     public void mecanumTrigPlayer() {
         //See http://thinktank.wpi.edu/resources/346/ControllingMecanumDrive.pdf
-        double r = (Math.hypot(gamepad1().left_stick_x, gamepad1().left_stick_y))/Math.sqrt(2);
-        double robotAngle = Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y)  - sensorSystem.getYaw() + Math.PI / 4;
-        double rightX = gamepad1().right_stick_x;
+        double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
+        double robotAngle = Math.atan2(-gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getYaw() + Math.PI / 4;
+        double rightX = -gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
     }
@@ -172,8 +175,8 @@ public class DriveSystem extends SubSystem{
      */
     public void mecanumTrigRobot() {
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
-        double robotAngle = Math.atan2(gamepad1().left_stick_x,gamepad1().left_stick_y) + Math.PI / 4;
-        double rightX = gamepad1().right_stick_x;
+        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y) + Math.PI / 4;
+        double rightX = -gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
     }
@@ -183,9 +186,9 @@ public class DriveSystem extends SubSystem{
      * use any trig and also does not factor robot orientation into it
      */
     public void mecanumNoTrig() {
-        double Ch1 = -gamepad1().right_stick_x;
-        double Ch3 = gamepad1().left_stick_y;
-        double Ch4 = gamepad1().left_stick_x;
+        double Ch1 = gamepad1().right_stick_x;
+        double Ch3 = -gamepad1().left_stick_y;
+        double Ch4 = -gamepad1().left_stick_x;
 
         double frontLeftPower = Ch3 + Ch1 + Ch4;
         double rearLeftPower = Ch3 + Ch1 - Ch4;
@@ -275,5 +278,18 @@ public class DriveSystem extends SubSystem{
         while (Math.abs(initialAngle-sensorSystem.getYaw()) < Math.abs(radians)){sensorSystem.updateGyro();}
         stopMotors();
         resetEncoders();
+    }
+
+    public int getEncoderValues() {
+        int arrayOfData;
+        arrayOfData = frontRight.getCurrentPosition();
+        return arrayOfData;
+    }
+
+    public void setTurnPower(double rightPower, double leftPower) {
+        frontRight.setPower(rightPower);
+        rearRight.setPower(rightPower);
+        frontLeft.setPower(leftPower);
+        rearLeft.setPower(leftPower);
     }
 }

@@ -27,7 +27,7 @@ public class Ultron extends Robot{
     public static final String LIFT_R_WINCH_KEY = "RL";//MR Port 0
     public static final String LIFT_L_WINCH_KEY = "LL";//MR Port 1
     public static final int ZERO_CUBE_HEIGHT = 0;
-    public static final int HALF_CUBE_HEIGHT = 0;
+    public static final int HALF_CUBE_HEIGHT = 1000;
     public static final int ONE_CUBE_HEIGHT = 0;
     public static final int TWO_CUBE_HEIGHT = 0;
     public static final int THREE_CUBE_HEIGHT = 0;
@@ -39,8 +39,8 @@ public class Ultron extends Robot{
 //    public static final String LEFT_LOWER_SERVO_KEY = "LLS";
     public static final double RIGHT_TOP_SERVO_OPEN = 0.41;
     public static final double RIGHT_TOP_SERVO_CLOSED = 0;
-    public static final double LEFT_TOP_SERVO_OPEN = 0.51;
-    public static final double LEFT_TOP_SERVO_CLOSED = 1;
+    public static final double LEFT_TOP_SERVO_OPEN = 0;
+    public static final double LEFT_TOP_SERVO_CLOSED = 0.65;
 //    public static final double RIGHT_LOWER_SERVO_OPEN = 0;
 //    public static final double RIGHT_LOWER_SERVO_CLOSED = 0;
 //    public static final double LEFT_LOWER_SERVO_OPEN = 0;
@@ -51,10 +51,10 @@ public class Ultron extends Robot{
     public static final String RIGHT_LOWER_JEWEL_SERVO_KEY = "RLJ";//Servo Port 3
     public static final String LEFT_TOP_JEWEL_SERVO_KEY = "LUJ";//Servo Port 4
     public static final String LEFT_LOWER_JEWEL_SERVO_KEY = "LLJ";//Servo Port 5
-    public static final double RIGHT_TOP_SERVO_DOWN = 0;
-    public static final double RIGHT_LOWER_SERVO_DOWN = 0;
-    public static final double RIGHT_TOP_SERVO_UP = 0;
-    public static final double RIGHT_LOWER_SERVO_UP = 0;
+    public static final double RIGHT_TOP_SERVO_DOWN = 0;//1
+    public static final double RIGHT_LOWER_SERVO_DOWN = 0.2;//0.34
+    public static final double RIGHT_TOP_SERVO_UP = 0.45;//0.45
+    public static final double RIGHT_LOWER_SERVO_UP = 1;//0
     public static final double LEFT_TOP_SERVO_DOWN = 0;
     public static final double LEFT_LOWER_SERVO_DOWN = 0;
     public static final double LEFT_TOP_SERVO_UP = 0;

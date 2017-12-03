@@ -20,11 +20,11 @@ public class JewelSystem extends SubSystem {
     public void init() {
         topRight = hardwareMap().servo.get(Ultron.RIGHT_TOP_JEWEL_SERVO_KEY);
         lowerRight = hardwareMap().servo.get(Ultron.RIGHT_LOWER_JEWEL_SERVO_KEY);
-        topLeft = hardwareMap().servo.get(Ultron.LEFT_TOP_JEWEL_SERVO_KEY);
-        lowerLeft = hardwareMap().servo.get(Ultron.LEFT_LOWER_JEWEL_SERVO_KEY);
+//        topLeft = hardwareMap().servo.get(Ultron.LEFT_TOP_JEWEL_SERVO_KEY);
+//        lowerLeft = hardwareMap().servo.get(Ultron.LEFT_LOWER_JEWEL_SERVO_KEY);
 
         rightUp();
-        leftUp();
+//        leftUp();
     }
 
     @Override
@@ -32,20 +32,20 @@ public class JewelSystem extends SubSystem {
         if (robot.TWO_DRIVERS) {
             if (gamepad2().a) {
                 rightDown();
-                leftDown();
+//                leftDown();
             }
             if (gamepad2().y) {
                 rightUp();
-                leftUp();
+//                leftUp();
             }
         }else {
             if (gamepad1().a) {
                 rightDown();
-                leftDown();
+//                leftDown();
             }
             if (gamepad1().y) {
                 rightUp();
-                leftUp();
+//                leftUp();
             }
         }
     }
@@ -65,13 +65,13 @@ public class JewelSystem extends SubSystem {
         lowerRight.setPosition(Ultron.RIGHT_LOWER_SERVO_UP);
     }
 
-    public void leftDown() {
-        topLeft.setPosition(Ultron.LEFT_TOP_SERVO_DOWN);
-        lowerLeft.setPosition(Ultron.LEFT_LOWER_SERVO_DOWN);
-    }
-
-    public void leftUp() {
-        topLeft.setPosition(Ultron.LEFT_TOP_SERVO_UP);
-        lowerLeft.setPosition(Ultron.LEFT_LOWER_SERVO_UP);
-    }
+//    public void leftDown() {
+//        topLeft.setPosition(Ultron.LEFT_TOP_SERVO_DOWN);
+//        lowerLeft.setPosition(Ultron.LEFT_LOWER_SERVO_DOWN);
+//    }
+//
+//    public void leftUp() {
+//        topLeft.setPosition(Ultron.LEFT_TOP_SERVO_UP);
+//        lowerLeft.setPosition(Ultron.LEFT_LOWER_SERVO_UP);
+//    }
 }

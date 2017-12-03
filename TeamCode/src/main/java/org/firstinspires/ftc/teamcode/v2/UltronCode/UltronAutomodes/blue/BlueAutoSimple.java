@@ -2,44 +2,46 @@ package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAuto;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoBlue;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
 /**
- * Created by Julian on 11/15/2017.
+ * Created by Julian on 12/2/2017.
  */
-@Autonomous(name = "BlueAutoCorner1")
-public class BlueAutoCorner1 extends UltronAutoBlue{
-
+@Autonomous (name = "BlueAutoSimple")
+public class BlueAutoSimple extends UltronAutoBlue {
     @Override
     public void main() {
         cubeSystem.closeTop();
+        waitFor(2);
         autoGoToLiftPos(LiftSystem.LiftState.HALF_CUBE_HEIGHT);
 
         jewelSystem.rightDown();
 
+        waitFor(3);
         int RCSRed = sensorSystem.getRedColor();
         int RCSBlue = sensorSystem.getBlueColor();
+        telemetry.addData("Red",RCSRed);
+        telemetry.addData("Blue",RCSBlue);
 
         if (RCSRed > RCSBlue) {//Sees Red
-            driveBackwardDistance(0.5,1000);// go backwards
+            driveTime(0.5,0.5);// go backwards
             jewelSystem.rightUp();
-            driveForwardDistance(0.5, 1000);
+            waitFor(1);
+            //driveTime(-0.5,0.5);
+            telemetry.addData("I saw", "Red");
         } else if (RCSBlue > RCSRed){//Sees Blue
-            driveForwardDistance(0.5, 1000);// go forwards
+            driveTime(-0.5,0.5);// go forwards
             jewelSystem.rightUp();//raise arm
-            driveBackwardDistance(0.5,1000);//go backwards
+            waitFor(1);
+            //driveTime(0.5,0.5);//go backwards
+            telemetry.addData("I saw", "Blue");
         } else {
             // something happened! don't move
         }
-
-        driveTime(0.5, 2);
-        turn(Math.PI/2, 0.5);
-        driveTime(0.5, 3);
+        telemetry.update();
+        driveTime(0.5, 0.5);
+        autoGoToLiftPos(LiftSystem.LiftState.ZERO_CUBE_HEIGHT);
         cubeSystem.openTop();
-
-
     }
 }

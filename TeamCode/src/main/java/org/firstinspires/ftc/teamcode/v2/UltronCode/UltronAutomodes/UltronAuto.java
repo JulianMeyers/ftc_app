@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes;
 
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -37,6 +39,10 @@ public abstract class UltronAuto extends AutonomousProgram{
     protected double currentYaw;
 
     private SimpleColor alliance;
+
+    public enum CryptoboxKey{
+        RIGHT,CENTER,LEFT
+    }
 
     public UltronAuto(SimpleColor alliance) {this.alliance = alliance;}
 
@@ -101,5 +107,84 @@ public abstract class UltronAuto extends AutonomousProgram{
         telemetry.update();
         driveSystem.stopMotors();
         return currentYaw;
+    }
+
+    public void driveStraightForward(int distance, double power) {
+
+        driveSystem.resetEncoders();
+        double leftSpeed; //Power to feed the motors
+        double rightSpeed;
+
+        double target = sensorSystem.getYaw();  //Starting direction
+        double startPosition = driveSystem.getEncoderValues();  //Starting position
+
+        while (driveSystem.getEncoderValues() < distance + startPosition && opModeIsActive()) {  //While we have not passed out intended distance
+            sensorSystem.updateGyro();
+            currentYaw = sensorSystem.getYaw();  //Current direction
+
+            leftSpeed = power + Math.toDegrees(currentYaw - target) / 100;  //Calculate speed for each side
+            rightSpeed = power - Math.toDegrees(currentYaw - target) / 100;  //See Gyro Straight video for detailed explanation
+
+            leftSpeed = Range.clip(leftSpeed, -1, 1);
+            rightSpeed = Range.clip(rightSpeed, -1, 1);
+
+            driveSystem.setTurnPower(rightSpeed,leftSpeed);
+
+            telemetry.addData("Distance to go", distance + startPosition - sensorSystem.getYaw());
+            telemetry.update();
+        }
+
+        driveSystem.stopMotors();
+    }
+
+    public void driveForwardDistance(double speed, double distance) {
+        int initialPos = driveSystem.getEncoderValues();
+        while (driveSystem.getEncoderValues() < initialPos + distance && opModeIsActive()) {
+            driveSystem.driveForward(speed);
+        }
+    }
+
+    public void driveBackwardDistance(double speed, double distance) {
+        int initialPos = driveSystem.getEncoderValues();
+        while (driveSystem.getEncoderValues() > initialPos - distance && opModeIsActive()) {
+            driveSystem.driveForward(-speed);
+        }
+    }
+
+    public void driveTime(double speed, double time) {
+        long initialTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() < initialTime + time*1000 && opModeIsActive()) {
+            driveSystem.driveForward(speed);
+        }
+    }
+
+    public void autoGoToLiftPos(LiftSystem.LiftState inLiftState) {
+        int targetPos = 0;
+        int THRESHOLD = 100;
+
+        switch (inLiftState) {
+            case ZERO_CUBE_HEIGHT:
+                targetPos = Ultron.ZERO_CUBE_HEIGHT;
+                break;
+            case HALF_CUBE_HEIGHT:
+                targetPos = Ultron.HALF_CUBE_HEIGHT;
+                break;
+            case ONE_CUBE_HEIGHT:
+                targetPos = Ultron.ONE_CUBE_HEIGHT;
+                break;
+            case TWO_CUBE_HEIGHT:
+                targetPos = Ultron.TWO_CUBE_HEIGHT;
+                break;
+            case THREE_CUBE_HEIGHT:
+                targetPos = Ultron.THREE_CUBE_HEIGHT;
+                break;
+        }
+
+        while (opModeIsActive() && Math.abs(liftSystem.getLiftPosition() - targetPos) > THRESHOLD) {
+            liftSystem.goToTargetLiftPos(targetPos);
+        }
+
+        liftSystem.stop();
+
     }
 }

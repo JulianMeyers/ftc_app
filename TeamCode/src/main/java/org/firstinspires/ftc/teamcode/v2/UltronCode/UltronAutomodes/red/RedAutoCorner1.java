@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 
 /**
  * Created by Julian on 11/15/2017.
@@ -11,16 +12,12 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRe
 @Autonomous (name = "RedAutoCorner1")
 public class RedAutoCorner1 extends UltronAutoRed {
 
-    enum CryptoboxKey{
-        RIGHT,CENTER,LEFT
-    }
-
     @Override
     public void main() {
         relicTrackables.activate();
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         long stopVuSearch = System.currentTimeMillis() + 5000;
-        CryptoboxKey cryptoboxKey = CryptoboxKey.RIGHT;
+        CryptoboxKey cryptoboxKey;
         int[] positionSeen = new int[3];//Right is 0, center is 1, left is 2
         while (opModeIsActive() && System.currentTimeMillis()< stopVuSearch) {
             switch (vuMark) {
@@ -52,29 +49,42 @@ public class RedAutoCorner1 extends UltronAutoRed {
             cryptoboxKey = CryptoboxKey.LEFT;
         }
 
-        jewelSystem.rightDown();
+        cubeSystem.closeTop();
+        autoGoToLiftPos(LiftSystem.LiftState.HALF_CUBE_HEIGHT);
 
-        int RCSRed = sensorSystem.getColorSensorData()[0];
-        int RCSBlue = sensorSystem.getColorSensorData()[1];
+        jewelSystem.rightDown();
+        waitFor(3);
+        int RCSRed = sensorSystem.getRedColor();
+        int RCSBlue = sensorSystem.getBlueColor();
 
         // Assuming color sensor is facing forwards...
 
         if (RCSRed > RCSBlue) {
-            // go backwards
-            //while ()
-            driveSystem.driveForward(-1.0);
-            //raise arm
-            //go forwards
+            driveBackwardDistance(0.5,200);// go backwards
+            jewelSystem.rightUp();
+            driveForwardDistance(0.5, 200);
         } else if (RCSBlue > RCSRed){
-            // go forwards
-            //raise arm
-            //go backwards
+            driveForwardDistance(0.5, 200);// go forwards
+            jewelSystem.rightUp();//raise arm
+            driveBackwardDistance(0.5,200);//go backwards
         } else {
             // something happened! don't move
         }
-        //Go to forwards correct amount based on cryptoboxkey
-        //Gyroturn right 90 degrees probably
-        //Go forwards time(to ensure that we get as close as possible to making it in
+
+        switch (cryptoboxKey) {
+            case RIGHT:
+                driveStraightForward(500, 0.5);
+            case CENTER:
+                driveStraightForward(700, 0.5);
+            case LEFT:
+                driveStraightForward(900, 0.5);
+        }
+
+        turn(Math.PI/2,0.5);//Gyroturn right 90 degrees probably
+        driveTime(0.75,5);//Go forwards time(to ensure that we get as close as possible to making it in
+
+        cubeSystem.openTop();
+        driveBackwardDistance(500, 0.5);
 
 
     }

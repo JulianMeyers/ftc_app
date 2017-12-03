@@ -17,7 +17,7 @@ public class LiftSystem extends SubSystem {
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
 
-    private enum LiftState{
+    public enum LiftState{
         ZERO_CUBE_HEIGHT,
         HALF_CUBE_HEIGHT,
         ONE_CUBE_HEIGHT,
@@ -38,7 +38,7 @@ public class LiftSystem extends SubSystem {
         leftLiftMotor = hardwareMap().dcMotor.get(Ultron.LIFT_L_WINCH_KEY);
 
         rightLiftMotor.setDirection(DcMotor.Direction.FORWARD);
-        leftLiftMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftLiftMotor.setDirection(DcMotor.Direction.FORWARD);
 
         liftState = LiftState.ZERO_CUBE_HEIGHT;
 
@@ -56,6 +56,7 @@ public class LiftSystem extends SubSystem {
             handleChangeInDPad(gamepad1());
             manualControls(gamepad1());
         }
+        goToState(liftState);
 
         telemetry().addData("Lift Position: ", getLiftPosition());
     }
@@ -63,7 +64,7 @@ public class LiftSystem extends SubSystem {
     @Override
     public void stop() {
         liftFloatMode();
-        setLifPower(0);
+        setLiftPower(0);
     }
 
     public void liftFloatMode() {
@@ -76,7 +77,7 @@ public class LiftSystem extends SubSystem {
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void setLifPower(double power) {
+    public void setLiftPower(double power) {
         rightLiftMotor.setPower(power);
         leftLiftMotor.setPower(power);
     }
@@ -99,15 +100,16 @@ public class LiftSystem extends SubSystem {
     public void goToTargetLiftPos(int position) {
         int currentPosition = rightLiftMotor.getCurrentPosition();
         int difference = currentPosition - position;
-        if (difference > 20) {
-            setLifPower(-0.5);
-        }else if (difference < -20) {
-            setLifPower(1);
+        if (difference > 100) {
+            setLiftPower(-0.5);
+        }else if (difference < -100) {
+            setLiftPower(1);
         }
     }
 
     public void handleChangeInDPad(Gamepad gamepad) {
         Gamepad gamepadToUse = gamepad;
+
         if (gamepadToUse.dpad_up && !dPadWasUp) {
             switch (liftState){
                 case ZERO_CUBE_HEIGHT:
@@ -126,6 +128,9 @@ public class LiftSystem extends SubSystem {
 
         if (gamepadToUse.dpad_down && !dPadWasDown) {
             switch (liftState) {
+                case HALF_CUBE_HEIGHT:
+                    liftState = LiftState.ZERO_CUBE_HEIGHT;
+                    break;
                 case ONE_CUBE_HEIGHT:
                     liftState = LiftState.HALF_CUBE_HEIGHT;
                     break;
@@ -140,6 +145,24 @@ public class LiftSystem extends SubSystem {
             }
         }
 
+        dPadWasUp = gamepadToUse.dpad_up;
+        dPadWasDown = gamepadToUse.dpad_down;
+    }
+
+    public void manualControls(Gamepad gamepad) {
+        if (gamepad.right_trigger>0.01){
+            leftLiftMotor.setPower(gamepad.right_trigger);
+            rightLiftMotor.setPower(gamepad.right_trigger);
+        }else if (gamepad.left_trigger>0.01){
+            leftLiftMotor.setPower(-gamepad.left_trigger);
+            rightLiftMotor.setPower(-gamepad.left_trigger);
+        }else{
+            rightLiftMotor.setPower(0);
+            leftLiftMotor.setPower(0);
+        }
+    }
+
+    public void goToState(LiftState inLiftState) {
         switch (liftState) {
             case ZERO_CUBE_HEIGHT:
                 goToTargetLiftPos(Ultron.ZERO_CUBE_HEIGHT);
@@ -156,21 +179,6 @@ public class LiftSystem extends SubSystem {
             case THREE_CUBE_HEIGHT:
                 goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
                 break;
-        }
-        dPadWasUp = gamepadToUse.dpad_up;
-        dPadWasDown = gamepadToUse.dpad_down;
-    }
-
-    public void manualControls(Gamepad gamepad) {
-        if (gamepad.right_trigger>0.01){
-            leftLiftMotor.setPower(gamepad.right_trigger);
-            rightLiftMotor.setPower(gamepad.right_trigger);
-        }else if (gamepad.left_trigger>0.01){
-            leftLiftMotor.setPower(-gamepad.left_trigger);
-            rightLiftMotor.setPower(-gamepad.left_trigger);
-        }else{
-            rightLiftMotor.setPower(0);
-            leftLiftMotor.setPower(0);
         }
     }
 

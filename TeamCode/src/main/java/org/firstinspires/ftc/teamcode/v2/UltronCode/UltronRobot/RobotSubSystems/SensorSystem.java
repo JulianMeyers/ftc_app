@@ -55,6 +55,7 @@ public class SensorSystem extends SubSystem {
     @Override
     public void handle() {
         updateGyro();
+
         displayValues();
     }
 
@@ -70,8 +71,12 @@ public class SensorSystem extends SubSystem {
         pitch = (angles.thirdAngle + Math.PI*2)%(2*Math.PI);
     }
 
-    public int[] getColorSensorData() {
-        return new int[]{colorSensor.red(), colorSensor.blue()};
+    public int getRedColor() {
+        return colorSensor.red();
+    }
+
+    public int getBlueColor() {
+        return colorSensor.blue();
     }
 
     public double getYaw() {
@@ -90,5 +95,7 @@ public class SensorSystem extends SubSystem {
         telemetry().addData("Yaw", yaw);
         telemetry().addData("Roll", roll);
         telemetry().addData("Pitch", pitch);
+        telemetry().addData("Red", getRedColor());
+        telemetry().addData("Blue", getBlueColor());
     }
 }
