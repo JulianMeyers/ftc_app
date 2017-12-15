@@ -43,17 +43,17 @@ public class DriveSystem extends SubSystem{
 
     @Override
     public void handle() {
+//        if (gamepad1().right_bumper) {
+//            slow = true;
+//        } else {
+//            slow = false;
+//        }
         if (gamepad1().right_bumper) {
-            slow = true;
-        } else {
-            slow = false;
-        }
-        if (gamepad1().right_bumper) {
-            mecanumTrigRobot();
+            mecanumTrigPlayer();
         } else if (gamepad1().left_bumper) {
             mecanumNoTrig();
         } else {
-            mecanumTrigPlayer();
+            mecanumTrigRobot();
         }
         if (gamepad1().left_stick_button) {
             resetEncoders();
