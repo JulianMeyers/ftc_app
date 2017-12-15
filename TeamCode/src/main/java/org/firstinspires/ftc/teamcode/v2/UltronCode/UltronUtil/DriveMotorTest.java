@@ -22,7 +22,7 @@ public class DriveMotorTest extends UltronAuto {
         driveSystem.modeVoltage();
         driveSystem.brakeMode();
         driveSystem.driveForward(-0.25);
-        sleep(60000);
+        sleep(2000);
         driveSystem.driveForward(0);
         while (opModeIsActive()) {
             driveSystem.displayPositions();
