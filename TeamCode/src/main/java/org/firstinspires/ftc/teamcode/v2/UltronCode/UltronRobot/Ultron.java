@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.JewelSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.SensorSystem;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
 /**
@@ -64,6 +65,11 @@ public class Ultron extends Robot{
     public static final String IMU_KEY = "IMU";//I2C 0
     public static final String COLOR_SENSOR_KEY = "CS";//I2C 1
 
+    //VuforiaSystem
+    public static final String vuforiaLicenseKey = "Ac8vX/3/////AAAAGRLM+gjmWUoAhO8Kns/kDEpxkCW1u1lX1uZW3r/rphUKMxf6jDE4oTHTZ3F/J0GwvD+hMipwaFBziRnmUDZHHXNM//wCa80uaLKJPlK7KkLqmz8dedEKTeMZomxY0T/dAee/7nGRrOtTihtJZvQJNv9RHvgWGF8pR0/lzZobtkU7V3uv+DC/gXY9sJxn/yQdxjxBXuW83wzVcT8tsefn7G8+9T9Til2ZOt/SNV8ilLdfiYFfMUaDdbJnTmaQlhITHP2dtmu71op2u5tsHlABrhs1RDwq3DPC+X+DLJfaPV8kTrgxgo0yxGjDgDmprty6x/BZkv7GD347DQlGBPRuhoSCzrtrR9XtC+FYeuVsbWOu";
+    public static final String cameraViewID = "cameraMonitorViewId";
+    public static final String relicTemplate = "relicVuMarkTemplate";
+    public static final String vuMarkAsset = "RelicVuMark";
 
     public SimpleColor ALLIANCE;
 
@@ -76,5 +82,6 @@ public class Ultron extends Robot{
         putSubSystem("lift", new LiftSystem(this));
         putSubSystem("cube", new CubeSystem(this));
         putSubSystem("jewel", new JewelSystem(this));
+        putSubSystem("vuforia", new VuforiaSystem(this));
     }
 }

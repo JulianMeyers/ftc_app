@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
 
 /**
  * Created by Julian on 11/15/2017.
@@ -14,12 +16,11 @@ public class RedAutoCorner1 extends UltronAutoRed {
 
     @Override
     public void main() {
-        relicTrackables.activate();
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         long stopVuSearch = System.currentTimeMillis() + 5000;
-        CryptoboxKey cryptoboxKey;
+        VuforiaSystem.CryptoboxKey cryptoboxKey;
         int[] positionSeen = new int[3];//Right is 0, center is 1, left is 2
         while (opModeIsActive() && System.currentTimeMillis()< stopVuSearch) {
+            vuMark = vuforiaSystem.checkForVuMark();
             switch (vuMark) {
                 case RIGHT:
                     positionSeen[0]++;
@@ -42,11 +43,14 @@ public class RedAutoCorner1 extends UltronAutoRed {
         }
 
         if (maxPos == positionSeen[0]) {
-            cryptoboxKey = CryptoboxKey.RIGHT;
+            telemetry.addData("I Saw", "Right");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.RIGHT;
         } else if (maxPos == positionSeen[1]) {
-            cryptoboxKey = CryptoboxKey.CENTER;
+            telemetry.addData("I Saw", "Center");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.CENTER;
         } else {
-            cryptoboxKey = CryptoboxKey.LEFT;
+            telemetry.addData("I Saw", "Left");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.LEFT;
         }
 
         cubeSystem.closeTop();
