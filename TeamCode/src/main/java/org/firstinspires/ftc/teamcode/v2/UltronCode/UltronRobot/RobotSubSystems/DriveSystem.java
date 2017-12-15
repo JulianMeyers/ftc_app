@@ -164,7 +164,7 @@ public class DriveSystem extends SubSystem{
         //See http://thinktank.wpi.edu/resources/346/ControllingMecanumDrive.pdf
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
         double robotAngle = Math.atan2(-gamepad1().left_stick_x,-gamepad1().left_stick_y)  - sensorSystem.getYaw() + Math.PI / 4;
-        double rightX = -gamepad1().right_stick_x;
+        double rightX = gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
     }
@@ -176,7 +176,7 @@ public class DriveSystem extends SubSystem{
     public void mecanumTrigRobot() {
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
         double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y) + Math.PI / 4;
-        double rightX = -gamepad1().right_stick_x;
+        double rightX = gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
     }
