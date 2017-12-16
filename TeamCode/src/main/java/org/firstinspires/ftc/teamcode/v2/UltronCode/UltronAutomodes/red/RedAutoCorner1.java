@@ -77,11 +77,11 @@ public class RedAutoCorner1 extends UltronAutoRed {
 
         switch (cryptoboxKey) {
             case RIGHT:
-                driveStraightForward(500, 0.5);
+                driveStraightForward(500, 0.5);//I need calibration
             case CENTER:
-                driveStraightForward(700, 0.5);
+                driveStraightForward(700, 0.5);//I need calibration
             case LEFT:
-                driveStraightForward(900, 0.5);
+                driveStraightForward(900, 0.5);//I need calibration
         }
 
         turn(Math.PI/2,0.5);//Gyroturn right 90 degrees probably

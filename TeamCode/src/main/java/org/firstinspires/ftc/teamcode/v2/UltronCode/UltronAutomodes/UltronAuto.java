@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
+import org.opencv.core.Mat;
 
 import java.lang.annotation.Target;
 
@@ -124,16 +125,32 @@ public abstract class UltronAuto extends AutonomousProgram{
     }
 
     public void driveForwardDistance(double speed, double distance) {
+        speed = Math.abs(speed);
+        distance = Math.abs(distance);
         int initialPos = driveSystem.getEncoderValues();
+        int currentDistance = driveSystem.getEncoderValues();
         while (driveSystem.getEncoderValues() < initialPos + distance && opModeIsActive()) {
+            telemetry.addData("Current distance", currentDistance);
+            telemetry.addData("Target distance", distance);
+            telemetry.addData("Difference", initialPos - distance);
+            telemetry.update();
             driveSystem.driveForward(speed);
+            currentDistance = driveSystem.getEncoderValues();
         }
     }
 
     public void driveBackwardDistance(double speed, double distance) {
+        speed = Math.abs(speed);
+        distance = Math.abs(distance);
         int initialPos = driveSystem.getEncoderValues();
-        while (driveSystem.getEncoderValues() > initialPos - distance && opModeIsActive()) {
+        int currentDistance = driveSystem.getEncoderValues();
+        while (currentDistance > initialPos - distance && opModeIsActive()) {
+            telemetry.addData("Current distance", currentDistance);
+            telemetry.addData("Target distance", distance);
+            telemetry.addData("Difference", initialPos - distance);
+            telemetry.update();
             driveSystem.driveForward(-speed);
+            currentDistance = driveSystem.getEncoderValues();
         }
     }
 

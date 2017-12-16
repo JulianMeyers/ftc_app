@@ -175,7 +175,7 @@ public class DriveSystem extends SubSystem{
      */
     public void mecanumTrigRobot() {
         double r = (Math.hypot(gamepad1().left_stick_x, -gamepad1().left_stick_y))/Math.sqrt(2);
-        double robotAngle = Math.atan2(gamepad1().left_stick_x,-gamepad1().left_stick_y) + Math.PI / 4;
+        double robotAngle = Math.atan2(-gamepad1().left_stick_x,-gamepad1().left_stick_y) + Math.PI / 4;
         double rightX = gamepad1().right_stick_x;
 
         driveAngle(r, robotAngle, rightX);
@@ -232,10 +232,10 @@ public class DriveSystem extends SubSystem{
      * @param turnAmount takes a value between -1 and 1 which should give power of turn
      */
     public void driveAngle(double inPower, double robotAngle, double turnAmount) {
-        double frontLeftPower = inPower * Math.sin(robotAngle) - turnAmount;
-        double frontRightPower = inPower * Math.cos(robotAngle) + turnAmount;
-        double rearLeftPower = inPower * Math.cos(robotAngle) - turnAmount;
-        double rearRightPower = inPower * Math.sin(robotAngle) + turnAmount;
+        double frontLeftPower = inPower * Math.sin(robotAngle) + turnAmount;
+        double frontRightPower = inPower * Math.cos(robotAngle) - turnAmount;
+        double rearLeftPower = inPower * Math.cos(robotAngle) + turnAmount;
+        double rearRightPower = inPower * Math.sin(robotAngle) - turnAmount;
 
         double[] powerList = new double[4];
         double absMax = 0;
@@ -281,9 +281,9 @@ public class DriveSystem extends SubSystem{
     }
 
     public int getEncoderValues() {
-        int arrayOfData;
-        arrayOfData = frontRight.getCurrentPosition();
-        return arrayOfData;
+        int encoderPosition;
+        encoderPosition = frontRight.getCurrentPosition();
+        return encoderPosition;
     }
 
     public void setTurnPower(double rightPower, double leftPower) {

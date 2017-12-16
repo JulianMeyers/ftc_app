@@ -22,7 +22,7 @@ public class Ultron extends Robot{
     public static final String DRIVE_RL_KEY = "LRD";//DC Port 1
     public static final String DRIVE_FR_KEY = "RFD";//DC Port 2
     public static final String DRIVE_RR_KEY = "RRD";//DC Port 3
-    public static final double MIN_TURN_SPEED = 0.2;
+    public static final double MIN_TURN_SPEED = 0.3;
 
     //LiftSystem
     public static final String LIFT_R_WINCH_KEY = "RL";//MR Port 0

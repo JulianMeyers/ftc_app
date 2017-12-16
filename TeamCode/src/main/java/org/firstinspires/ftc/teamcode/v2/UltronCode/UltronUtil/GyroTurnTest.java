@@ -18,7 +18,7 @@ public class GyroTurnTest extends UltronAuto {
     public void main() {
         sensorSystem.updateGyro();
         double initialTurn = sensorSystem.getYaw();
-        double finalTurn = turn(Math.PI/2, 0.5);
+        double finalTurn = turn(Math.PI/2, -0.5);
         while (opModeIsActive()) {
             telemetry.addData("Initial Yaw", Math.toDegrees(initialTurn));
             telemetry.addData("Final Yaw", Math.toDegrees(finalTurn));
@@ -26,5 +26,6 @@ public class GyroTurnTest extends UltronAuto {
             telemetry.addData("Actual Yaw", Math.toDegrees(sensorSystem.getYaw()));
             telemetry.update();
         }
+        turn(-Math.PI/2, 0.5);
     }
 }
