@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAuto;
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
 
 /**
  * Created by Julian on 11/19/2017.
@@ -18,9 +16,13 @@ public class DriveMotorTest extends UltronAuto {
 
     @Override
     public void main() {
-        driveToGivenPosition(1000);
-        telemetry.addData("Current Distance", driveSystem.getEncoderValues());
+        driveForwardsToGivenPosition(0.75, 1000);
+        telemetry.addData("Current Distance", driveSystem.getRightEncoderValue());
         telemetry.update();
-        sleep(5000);
+        sleep(2000);
+        driveBackwardsToGivenPosition(-0.75, -1000);
+        telemetry.addData("Current Distance", driveSystem.getRightEncoderValue());
+        telemetry.update();
+        sleep(2000);
     }
 }

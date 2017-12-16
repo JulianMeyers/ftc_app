@@ -22,7 +22,7 @@ public class Ultron extends Robot{
     public static final String DRIVE_RL_KEY = "LRD";//DC Port 1
     public static final String DRIVE_FR_KEY = "RFD";//DC Port 2
     public static final String DRIVE_RR_KEY = "RRD";//DC Port 3
-    public static final double MIN_TURN_SPEED = 0.3;
+    public static final double MIN_TURN_SPEED = 0.4;
 
     //LiftSystem
     public static final String LIFT_R_WINCH_KEY = "RL";//MR Port 0
@@ -39,9 +39,11 @@ public class Ultron extends Robot{
 //    public static final String RIGHT_LOWER_SERVO_KEY = "RLS";
 //    public static final String LEFT_LOWER_SERVO_KEY = "LLS";
     public static final double RIGHT_TOP_SERVO_OPEN = 0.41;
+    public static final double RIGHT_TOP_SERVO_RELEASED = 0.2;
     public static final double RIGHT_TOP_SERVO_CLOSED = 0;
     public static final double LEFT_TOP_SERVO_OPEN = 0;
-    public static final double LEFT_TOP_SERVO_CLOSED = 0.65;
+    public static final double LEFT_TOP_SERVO_RELEASED = 0.2;
+    public static final double LEFT_TOP_SERVO_CLOSED = 0.55;
 //    public static final double RIGHT_LOWER_SERVO_OPEN = 0;
 //    public static final double RIGHT_LOWER_SERVO_CLOSED = 0;
 //    public static final double LEFT_LOWER_SERVO_OPEN = 0;

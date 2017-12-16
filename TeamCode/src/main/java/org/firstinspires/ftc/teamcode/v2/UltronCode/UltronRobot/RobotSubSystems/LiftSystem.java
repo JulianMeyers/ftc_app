@@ -100,10 +100,12 @@ public class LiftSystem extends SubSystem {
     public void goToTargetLiftPos(int position) {
         int currentPosition = rightLiftMotor.getCurrentPosition();
         int difference = currentPosition - position;
-        if (difference > 100) {
-            setLiftPower(-0.5);
-        }else if (difference < -100) {
-            setLiftPower(1);
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightLiftMotor.setTargetPosition(position);
+        if (rightLiftMotor.isBusy()) {
+            setLiftPower(0.75);
+        } else {
+            setLiftPower(0);
         }
     }
 
@@ -180,6 +182,22 @@ public class LiftSystem extends SubSystem {
                 goToTargetLiftPos(Ultron.THREE_CUBE_HEIGHT);
                 break;
         }
+    }
+
+    public DcMotor getRightLiftMotor() {
+        return rightLiftMotor;
+    }
+
+    public void setRightLiftMotor(DcMotor rightLiftMotor) {
+        this.rightLiftMotor = rightLiftMotor;
+    }
+
+    public DcMotor getLeftLiftMotor() {
+        return leftLiftMotor;
+    }
+
+    public void setLeftLiftMotor(DcMotor leftLiftMotor) {
+        this.leftLiftMotor = leftLiftMotor;
     }
 
     public int getLiftPosition() {

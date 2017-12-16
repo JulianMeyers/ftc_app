@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red.Base;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
@@ -64,13 +60,13 @@ public class RedAutoCornerBase extends UltronAutoRed {
         // Assuming color sensor is facing forwards...
 
         if (RCSRed > RCSBlue) {
-            driveBackwardDistance(0.5,200);// go backwards
+            driveForwardsToGivenPosition(-0.5,-200);// go backwards
             jewelSystem.rightUp();
-            driveForwardDistance(0.5, 200);
+            driveForwardsToGivenPosition(0.5, 200);
         } else if (RCSBlue > RCSRed){
-            driveForwardDistance(0.5, 200);// go forwards
+            driveForwardsToGivenPosition(0.5, 200);// go forwards
             jewelSystem.rightUp();//raise arm
-            driveBackwardDistance(0.5,200);//go backwards
+            driveForwardsToGivenPosition(-0.5,-200);//go backwards
         } else {
             // something happened! don't move
         }
@@ -88,7 +84,7 @@ public class RedAutoCornerBase extends UltronAutoRed {
         driveTime(0.75,5);//Go forwards time(to ensure that we get as close as possible to making it in
 
         cubeSystem.openTop();
-        driveBackwardDistance(500, 0.5);
+        driveForwardsToGivenPosition(-0.5, -200);
 
 
     }

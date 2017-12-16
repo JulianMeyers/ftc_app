@@ -3,12 +3,7 @@ package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronOpMode.AutonomousProgram;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.CubeSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.DriveSystem;
@@ -19,9 +14,6 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
-import org.opencv.core.Mat;
-
-import java.lang.annotation.Target;
 
 /**
  * Created by Julian on 11/15/2017.
@@ -61,6 +53,12 @@ public abstract class UltronAuto extends AutonomousProgram{
     }
 
 
+    /**
+     * turns to the left specified amount
+     * @param target
+     * @param turnSpeed
+     * @return
+     */
     public double turn(double target, double turnSpeed) {
         sensorSystem.updateGyro();
         currentYaw = sensorSystem.getYaw();
@@ -104,9 +102,9 @@ public abstract class UltronAuto extends AutonomousProgram{
         double rightSpeed;
 
         double target = sensorSystem.getYaw();  //Starting direction
-        double startPosition = driveSystem.getEncoderValues();  //Starting position
+        double startPosition = driveSystem.getRightEncoderValue();  //Starting position
 
-        while (driveSystem.getEncoderValues() < distance + startPosition && opModeIsActive()) {  //While we have not passed out intended distance
+        while (driveSystem.getRightEncoderValue() < distance + startPosition && opModeIsActive()) {  //While we have not passed out intended distance
             sensorSystem.updateGyro();
             currentYaw = sensorSystem.getYaw();  //Current direction
 
@@ -125,48 +123,98 @@ public abstract class UltronAuto extends AutonomousProgram{
         driveSystem.stopMotors();
     }
 
-    public void driveForwardDistance(double speed, double distance) {
-        speed = Math.abs(speed);
-        distance = Math.abs(distance);
-        int initialPos = driveSystem.getEncoderValues();
-        int currentDistance = driveSystem.getEncoderValues();
-        while (driveSystem.getEncoderValues() < initialPos + distance && opModeIsActive()) {
-            telemetry.addData("Current distance", currentDistance);
-            telemetry.addData("Target distance", distance);
-            telemetry.addData("Difference", initialPos - distance);
+    /**
+     * Takes negative values
+     * @param distance
+     * @param power
+     */
+    public void driveStraightBackwards (int distance, double power) {
+
+        driveSystem.resetEncoders();
+        double leftSpeed; //Power to feed the motors
+        double rightSpeed;
+
+        double target = sensorSystem.getYaw();  //Starting direction
+        double startPosition = driveSystem.getRightEncoderValue();  //Starting position
+
+        while (driveSystem.getRightEncoderValue() > distance + startPosition && opModeIsActive()) {  //While we have not passed out intended distance
+            sensorSystem.updateGyro();
+            currentYaw = sensorSystem.getYaw();  //Current direction
+
+            leftSpeed = power - Math.toDegrees(currentYaw - target) / 100;  //Calculate speed for each side
+            rightSpeed = power + Math.toDegrees(currentYaw - target) / 100;  //See Gyro Straight video for detailed explanation
+
+            leftSpeed = Range.clip(leftSpeed, -1, 1);
+            rightSpeed = Range.clip(rightSpeed, -1, 1);
+
+            driveSystem.setTurnPower(rightSpeed,leftSpeed);
+
+            telemetry.addData("Distance to go", distance + startPosition - sensorSystem.getYaw());
             telemetry.update();
-            driveSystem.driveForward(speed);
-            currentDistance = driveSystem.getEncoderValues();
         }
+
+        driveSystem.stopMotors();
     }
 
-    public void driveToGivenPosition(int distance) {
-        int initialDistance = driveSystem.getEncoderValues();
+    public void driveForwardsToGivenPosition(double inPower, int distance) {
         driveSystem.resetEncoders();
-        driveSystem.getFrontRight().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        driveSystem.getFrontRight().setTargetPosition(distance + initialDistance);
-        while (driveSystem.getFrontRight().isBusy() && opModeIsActive()) {
-            double power = driveSystem.getFrontRight().getPower();
-            driveSystem.getFrontLeft().setPower(power);
-            driveSystem.getRearRight().setPower(power);
-            driveSystem.getRearLeft().setPower(power);
+        int currentRightPos = driveSystem.getRightEncoderValue();
+        int currentLeftPos = driveSystem.getLeftEncoderValue();
+        while ((currentRightPos<distance || currentLeftPos<distance) && opModeIsActive()) {
+            if (currentLeftPos<distance) {
+                driveSystem.getFrontLeft().setPower(inPower);
+                driveSystem.getRearLeft().setPower(inPower);
+            } else {
+                driveSystem.getFrontLeft().setPower(0);
+                driveSystem.getRearLeft().setPower(0);
+            }
+            if (currentRightPos<distance) {
+                driveSystem.getFrontRight().setPower(inPower);
+                driveSystem.getRearRight().setPower(inPower);
+            } else {
+                driveSystem.getFrontRight().setPower(0);
+                driveSystem.getRearRight().setPower(0);
+            }
+            currentRightPos = driveSystem.getRightEncoderValue();
+            currentLeftPos = driveSystem.getLeftEncoderValue();
+            telemetry.addData("Right Pos", currentRightPos);
+            telemetry.addData("Left Pos", currentLeftPos);
+            telemetry.update();
         }
         driveSystem.stopMotors();
     }
 
-    public void driveBackwardDistance(double speed, double distance) {
-        speed = Math.abs(speed);
-        distance = Math.abs(distance);
-        int initialPos = driveSystem.getEncoderValues();
-        int currentDistance = driveSystem.getEncoderValues();
-        while (currentDistance > initialPos - distance && opModeIsActive()) {
-            telemetry.addData("Current distance", currentDistance);
-            telemetry.addData("Target distance", distance);
-            telemetry.addData("Difference", initialPos - distance);
+    /**
+     * takes negative values
+     * @param inPower
+     * @param distance
+     */
+    public void driveBackwardsToGivenPosition(double inPower, int distance) {
+        driveSystem.resetEncoders();
+        int currentRightPos = driveSystem.getRightEncoderValue();
+        int currentLeftPos = driveSystem.getLeftEncoderValue();
+        while ((currentRightPos>distance || currentLeftPos>distance) && opModeIsActive()) {
+            if (currentLeftPos>distance) {
+                driveSystem.getFrontLeft().setPower(inPower);
+                driveSystem.getRearLeft().setPower(inPower);
+            } else {
+                driveSystem.getFrontLeft().setPower(0);
+                driveSystem.getRearLeft().setPower(0);
+            }
+            if (currentRightPos>distance) {
+                driveSystem.getFrontRight().setPower(inPower);
+                driveSystem.getRearRight().setPower(inPower);
+            } else {
+                driveSystem.getFrontRight().setPower(0);
+                driveSystem.getRearRight().setPower(0);
+            }
+            currentRightPos = driveSystem.getRightEncoderValue();
+            currentLeftPos = driveSystem.getLeftEncoderValue();
+            telemetry.addData("Right Pos", currentRightPos);
+            telemetry.addData("Left Pos", currentLeftPos);
             telemetry.update();
-            driveSystem.driveForward(-speed);
-            currentDistance = driveSystem.getEncoderValues();
         }
+        driveSystem.stopMotors();
     }
 
     public void driveTime(double speed, double time) {
@@ -198,6 +246,10 @@ public abstract class UltronAuto extends AutonomousProgram{
                 break;
         }
 
+        liftSystem.getRightLiftMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (opModeIsActive() && liftSystem.getRightLiftMotor().isBusy()) {
+            liftSystem.goToTargetLiftPos(targetPos);
+        }
         while (opModeIsActive() && Math.abs(liftSystem.getLiftPosition() - targetPos) > THRESHOLD) {
             liftSystem.goToTargetLiftPos(targetPos);
         }

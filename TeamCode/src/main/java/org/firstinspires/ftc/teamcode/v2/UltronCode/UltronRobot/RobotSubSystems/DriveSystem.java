@@ -280,7 +280,13 @@ public class DriveSystem extends SubSystem{
         resetEncoders();
     }
 
-    public int getEncoderValues() {
+    public int getRightEncoderValue() {
+        int encoderPosition;
+        encoderPosition = frontRight.getCurrentPosition();
+        return encoderPosition;
+    }
+
+    public int getLeftEncoderValue() {
         int encoderPosition;
         encoderPosition = frontRight.getCurrentPosition();
         return encoderPosition;
