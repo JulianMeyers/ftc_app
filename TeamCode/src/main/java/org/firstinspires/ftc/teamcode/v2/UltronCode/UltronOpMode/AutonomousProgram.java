@@ -34,6 +34,8 @@ public abstract class AutonomousProgram extends LinearOpMode{
 
         waitForStart();
 
+        postInit();
+
         try {
             main();
         } catch(Exception ex) {

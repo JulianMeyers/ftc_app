@@ -73,11 +73,11 @@ public class BlueAutoCornerBase extends UltronAutoBlue {
 
         switch (cryptoboxKey) {
             case RIGHT:
-                driveStraightForward(1000, 0.5);//I need calibration
+                driveStraightForward(1500, 0.5);//I need calibration
             case CENTER:
                 driveStraightForward(2000, 0.5);//I need calibration
             case LEFT:
-                driveStraightForward(3000, 0.5);//I need calibration
+                driveStraightForward(2500, 0.5);//I need calibration
         }
 
         turn(Math.PI/2,0.5);//Gyroturn right 90 degrees probably
