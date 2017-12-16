@@ -1,15 +1,16 @@
-package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red;
+package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.blue.Base;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
+import org.firstinspires.ftc.teamcode.AutoTransitioner;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoBlue;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 
 /**
  * Created by Julian on 12/2/2017.
  */
-@Autonomous (name = "RedAutoSimple")
-public class RedAutoSimple extends UltronAutoRed {
+
+public class BlueAutoSimpleBase extends UltronAutoBlue {
 
     @Override
     public void main() {

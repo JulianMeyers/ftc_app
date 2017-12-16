@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red;
+package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red.Base;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoBlue;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
@@ -12,8 +11,8 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 /**
  * Created by Julian on 11/15/2017.
  */
-@Autonomous (name = "BlueAutoCorner1")
-public class BlueAutoCorner1 extends UltronAutoBlue {
+
+public class RedAutoCornerBase extends UltronAutoRed {
 
     @Override
     public void main() {
@@ -78,11 +77,11 @@ public class BlueAutoCorner1 extends UltronAutoBlue {
 
         switch (cryptoboxKey) {
             case RIGHT:
-                driveStraightForward(1000, 0.5);//I need calibration
+                driveStraightForward(500, 0.5);//I need calibration
             case CENTER:
-                driveStraightForward(2000, 0.5);//I need calibration
+                driveStraightForward(700, 0.5);//I need calibration
             case LEFT:
-                driveStraightForward(3000, 0.5);//I need calibration
+                driveStraightForward(900, 0.5);//I need calibration
         }
 
         turn(Math.PI/2,0.5);//Gyroturn right 90 degrees probably
