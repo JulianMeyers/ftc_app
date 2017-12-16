@@ -46,7 +46,7 @@ public class VuforiaSystem extends SubSystem {
 
         parameters.vuforiaLicenseKey = Ultron.vuforiaLicenseKey;
 
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         relicTrackables = this.vuforia.loadTrackablesFromAsset(Ultron.vuMarkAsset);

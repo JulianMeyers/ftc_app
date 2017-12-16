@@ -14,34 +14,33 @@ public class RedAutoSimpleBase extends UltronAutoRed {
     @Override
     public void main() {
         cubeSystem.closeTop();
-        waitFor(2);
-        autoGoToLiftPos(LiftSystem.LiftState.HALF_CUBE_HEIGHT);
+        waitFor(0.5);
+        autoGoToLiftPos(LiftSystem.LiftState.ONE_CUBE_HEIGHT);
 
         jewelSystem.rightDown();
 
-        waitFor(3);
+        waitFor(2);
         int RCSRed = sensorSystem.getRedColor();
         int RCSBlue = sensorSystem.getBlueColor();
         telemetry.addData("Red",RCSRed);
         telemetry.addData("Blue",RCSBlue);
 
-        if (RCSRed > RCSBlue) {//Sees Red
-            driveTime(0.5,0.5);// go backwards
+        int distanceForJewel = 300;
+
+        if (RCSBlue > RCSRed) {
+            driveBackwardsToGivenPosition(-0.5,-distanceForJewel);// go backwards
             jewelSystem.rightUp();
-            waitFor(1);
-            //driveTime(-0.5,0.5);
-            telemetry.addData("I saw", "Red");
-        } else if (RCSBlue > RCSRed){//Sees Blue
-            driveTime(-0.5,0.5);// go forwards
+            driveForwardsToGivenPosition(0.5,distanceForJewel);
+        } else if (RCSRed > RCSBlue){
+            driveForwardsToGivenPosition(0.5,distanceForJewel);// go forwards
             jewelSystem.rightUp();//raise arm
-            waitFor(1);
-            //driveTime(0.5,0.5);//go backwards
-            telemetry.addData("I saw", "Blue");
+            driveBackwardsToGivenPosition(-0.5,-distanceForJewel);//go backwards
         } else {
             // something happened! don't move
         }
+
         telemetry.update();
-        driveTime(0.5, 0.5);
+        driveForwardsToGivenPosition(0.5, 2500 );
         autoGoToLiftPos(LiftSystem.LiftState.ZERO_CUBE_HEIGHT);
         cubeSystem.openTop();
     }

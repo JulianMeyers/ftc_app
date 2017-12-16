@@ -1,16 +1,13 @@
-package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.blue.Base;
+package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red.Base;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.AutoTransitioner;
-import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoBlue;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
 
 /**
  * Created by Julian on 12/2/2017.
  */
 
-public class BlueAutoSimpleBase extends UltronAutoBlue {
+public class RedAutoSideBase extends UltronAutoRed {
 
     @Override
     public void main() {
@@ -26,18 +23,14 @@ public class BlueAutoSimpleBase extends UltronAutoBlue {
         telemetry.addData("Red",RCSRed);
         telemetry.addData("Blue",RCSBlue);
 
-        int distanceForJewel = 300;
-
         if (RCSBlue > RCSRed) {
-            driveBackwardsToGivenPosition(-0.5,-distanceForJewel);// go backwards
+            driveBackwardsToGivenPosition(-0.5,-200);// go backwards
             jewelSystem.rightUp();
-            waitFor(1);
-            driveForwardsToGivenPosition(0.5,distanceForJewel);
+            driveForwardsToGivenPosition(0.5,200);
         } else if (RCSRed > RCSBlue){
-            driveForwardsToGivenPosition(0.5,distanceForJewel);// go forwards
+            driveForwardsToGivenPosition(0.5,200);// go forwards
             jewelSystem.rightUp();//raise arm
-            waitFor(1);
-            driveBackwardsToGivenPosition(-0.5,-distanceForJewel);//go backwards
+            driveBackwardsToGivenPosition(-0.5,-200);//go backwards
         } else {
             // something happened! don't move
         }
