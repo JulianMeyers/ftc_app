@@ -292,4 +292,20 @@ public class DriveSystem extends SubSystem{
         frontLeft.setPower(leftPower);
         rearLeft.setPower(leftPower);
     }
+
+    public DcMotor getFrontRight() {
+        return frontRight;
+    }
+
+    public DcMotor getFrontLeft() {
+        return frontLeft;
+    }
+
+    public DcMotor getRearRight() {
+        return rearRight;
+    }
+
+    public DcMotor getRearLeft() {
+        return rearLeft;
+    }
 }

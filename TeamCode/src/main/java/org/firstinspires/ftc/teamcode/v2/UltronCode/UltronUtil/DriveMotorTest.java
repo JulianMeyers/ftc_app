@@ -18,15 +18,9 @@ public class DriveMotorTest extends UltronAuto {
 
     @Override
     public void main() {
-        driveSystem.modeReset();
-        driveSystem.modeVoltage();
-        driveSystem.brakeMode();
-        driveSystem.driveForward(-0.25);
-        sleep(2000);
-        driveSystem.driveForward(0);
-        while (opModeIsActive()) {
-            driveSystem.displayPositions();
-            telemetry.update();
-        }
+        driveToGivenPosition(1000);
+        telemetry.addData("Current Distance", driveSystem.getEncoderValues());
+        telemetry.update();
+        sleep(5000);
     }
 }

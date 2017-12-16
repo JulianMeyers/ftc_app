@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -137,6 +138,20 @@ public abstract class UltronAuto extends AutonomousProgram{
             driveSystem.driveForward(speed);
             currentDistance = driveSystem.getEncoderValues();
         }
+    }
+
+    public void driveToGivenPosition(int distance) {
+        int initialDistance = driveSystem.getEncoderValues();
+        driveSystem.resetEncoders();
+        driveSystem.getFrontRight().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        driveSystem.getFrontRight().setTargetPosition(distance + initialDistance);
+        while (driveSystem.getFrontRight().isBusy() && opModeIsActive()) {
+            double power = driveSystem.getFrontRight().getPower();
+            driveSystem.getFrontLeft().setPower(power);
+            driveSystem.getRearRight().setPower(power);
+            driveSystem.getRearLeft().setPower(power);
+        }
+        driveSystem.stopMotors();
     }
 
     public void driveBackwardDistance(double speed, double distance) {
