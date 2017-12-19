@@ -62,15 +62,15 @@ public class BlueAutoSideBase extends UltronAutoBlue {
         double turnForJewel = Math.PI/12;
 
         if (RCSBlue > RCSRed) {
-            turn(turnForJewel,0.5);// go backwards
+            turn(turnForJewel);// go backwards
             jewelSystem.rightUp();
             waitFor(1);
-            turn(-turnForJewel,0.5);
+            turn(-turnForJewel);
         } else if (RCSRed > RCSBlue){
-            turn(-turnForJewel,-0.5);// go forwards
+            turn(-turnForJewel);// go forwards
             jewelSystem.rightUp();
             waitFor(1);
-            turn(turnForJewel,0.5);
+            turn(turnForJewel);
         } else {
             // something happened! don't move
         }
@@ -78,11 +78,11 @@ public class BlueAutoSideBase extends UltronAutoBlue {
 
         driveForwardsToGivenPosition(0.5, 2000 );
 
-        turn(-Math.PI/2,0.5);
+        turn(-Math.PI/2);
 
         driveForwardsToGivenPosition(0.5,500);
 
-        turn(Math.PI/2,0.5);
+        turn(Math.PI/2);
 
         driveTime(0.5,1);
 

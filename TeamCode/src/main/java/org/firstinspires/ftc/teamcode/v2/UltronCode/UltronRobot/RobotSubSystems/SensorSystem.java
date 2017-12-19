@@ -25,6 +25,7 @@ public class SensorSystem extends SubSystem {
     private double yaw;
     private double roll;
     private double pitch;
+    private double conversionFactor;
 
     // Color sensor defs
     private ColorSensor colorSensor;
@@ -66,7 +67,7 @@ public class SensorSystem extends SubSystem {
 
     public void updateGyro() {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-        yaw = (angles.firstAngle + Math.PI*2)%(2*Math.PI);
+        yaw = (angles.firstAngle + conversionFactor);
         roll = (angles.secondAngle + Math.PI*2)%(2*Math.PI);
         pitch = (angles.thirdAngle + Math.PI*2)%(2*Math.PI);
     }
@@ -97,5 +98,10 @@ public class SensorSystem extends SubSystem {
         telemetry().addData("Pitch", pitch);
         telemetry().addData("Red", getRedColor());
         telemetry().addData("Blue", getBlueColor());
+    }
+
+    public void resetGyro() {
+        updateGyro();
+        conversionFactor = getYaw();
     }
 }

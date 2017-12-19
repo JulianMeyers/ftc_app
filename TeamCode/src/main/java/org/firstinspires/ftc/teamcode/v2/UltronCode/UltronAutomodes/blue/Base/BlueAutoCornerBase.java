@@ -62,7 +62,7 @@ public class BlueAutoCornerBase extends UltronAutoBlue {
                 driveStraightForward(2500, 0.5);//I need calibration
         }
 
-        turn(-Math.PI/2,0.5);//Gyroturn right 90 degrees probably
+        turn(-Math.PI/2);//Gyroturn right 90 degrees probably
         driveTime(0.75,3);//Go forwards time(to ensure that we get as close as possible to making it in
 
         cubeSystem.openTop();

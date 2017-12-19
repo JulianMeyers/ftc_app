@@ -16,9 +16,14 @@ public class GyroTurnTest extends UltronAuto {
 
     @Override
     public void main() {
-        turn(Math.PI/2, 0.5);
-        sleep(2000);
-        turn(-Math.PI/2, -0.5);
-        sleep(2000);
+        sensorSystem.updateGyro();
+        turn(Math.PI/2);//Turn left 90 degrees
+        telemetry.addData("I turned", "left");
+        telemetry.update();
+        sleep(2000);//Wait 2 seconds
+        turn(-Math.PI/2);//Turn right 90 degrees should power be negative here?
+        telemetry.addData("I turned", "right");
+        telemetry.update();
+        sleep(2000);//Wait 2 seconds
     }
 }

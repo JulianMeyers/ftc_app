@@ -17,6 +17,8 @@ public abstract class AutonomousProgram extends LinearOpMode{
 
     public void postInit() {}
 
+    public void postMain() {}
+
     public final void runOpMode () throws InterruptedException {
         try {
             robot = buildRobot();
@@ -42,6 +44,9 @@ public abstract class AutonomousProgram extends LinearOpMode{
             telemetry.addData("Error with main", ex.getMessage());
             ex.printStackTrace();
         }
+
+        postMain();
+
         telemetry.update();
     }
 

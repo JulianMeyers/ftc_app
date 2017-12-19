@@ -60,40 +60,59 @@ public abstract class UltronAuto extends AutonomousProgram{
         vuforiaSystem.activateVuforia();
     }
 
+    @Override
+    public void postMain() {
+        autoGoToLiftPos(LiftSystem.LiftState.ZERO_CUBE_HEIGHT);
+    }
 
     /**
      * turns to the left specified amount
      * @param target
-     * @param turnSpeed
      * @return
      */
-    public double turn(double target, double turnSpeed) {
+    public double turn(double target) {
         sensorSystem.updateGyro();
         currentYaw = sensorSystem.getYaw();
-        return turnAbsolute((target + currentYaw), turnSpeed);
+
+        double absoluteTarget = translateRadianAddition(currentYaw+target);//Converts properly? made by Julian, not the internet so may not be reliable
+        return turnAbsolute(absoluteTarget);
+    }
+
+
+    public static double translateRadianAddition(double numIn) {
+        double num = numIn;
+        if (numIn < -Math.PI) {
+            num = 2*Math.PI + numIn % (Math.PI * 2);
+            return translateRadianAddition(num);
+        } else if (numIn > Math.PI) {
+            num = -2*Math.PI + numIn % (Math.PI * 2);
+            return translateRadianAddition(num);
+        } else {
+            return num;
+        }
     }
 
     //This function turns a number of degrees compared to where the robot was when the program started. Positive numbers trn left.
-    public double turnAbsolute(double target, double inTurnSpeed) {
-        double tolerance = Math.PI/180;
-        double turnSpeedMultiplier = 1;
-        double turnSpeed = inTurnSpeed*turnSpeedMultiplier;
+    public double turnAbsolute(double target) {
+        double tolerance = Math.PI/180;//1 degree
+        double turnSpeed;
         sensorSystem.updateGyro();
         currentYaw = sensorSystem.getYaw();  //Set variables to gyro readings
         while (Math.abs(currentYaw - target) > tolerance && opModeIsActive()) {//Continue while the robot direction is further than three degrees from the target
+            telemetry.addData("Target", Math.toDegrees(target));
+            telemetry.addData("Current", Math.toDegrees(currentYaw));
+            telemetry.addData("Difference", Math.toDegrees(currentYaw - target));
 
-            turnSpeedMultiplier = Math.abs(currentYaw - target)/Math.abs(target);
-
-            if (inTurnSpeed*turnSpeedMultiplier < Ultron.MIN_TURN_SPEED) {
-                turnSpeed = Ultron.MIN_TURN_SPEED;
-            }
+            turnSpeed = Ultron.MIN_TURN_SPEED;
 
             if (currentYaw > target) {  //if gyro is positive, we will turn right
                 driveSystem.driveAngle(0, Math.PI/2, turnSpeed);
+                telemetry.addData("Turning", "Right");
             }
 
-            if (currentYaw < target) {  //if gyro is positive, we will turn left
+            if (currentYaw < target) {  //if gyro is negative, we will turn left
                 driveSystem.driveAngle(0, Math.PI/2, -turnSpeed);
+                telemetry.addData("Turning", "Left");
             }
             sensorSystem.updateGyro();
             currentYaw = sensorSystem.getYaw();  //Set variables to gyro readings
@@ -226,9 +245,10 @@ public abstract class UltronAuto extends AutonomousProgram{
         driveSystem.stopMotors();
     }
 
-    public void driveTime(double speed, double time) {
+    public void driveTime(double speed, double inTime) {
         long initialTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() < initialTime + time*1000 && opModeIsActive()) {
+        long stopTime = Math.round(inTime*1000 + initialTime);
+        while ((System.currentTimeMillis() < stopTime) && opModeIsActive()) {
             driveSystem.driveForward(speed);
         }
     }
