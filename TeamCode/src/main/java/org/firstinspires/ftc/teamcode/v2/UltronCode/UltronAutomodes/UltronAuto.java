@@ -78,6 +78,7 @@ public abstract class UltronAuto extends AutonomousProgram{
         double tolerance = Math.PI/180;
         double turnSpeedMultiplier = 1;
         double turnSpeed = inTurnSpeed*turnSpeedMultiplier;
+        sensorSystem.updateGyro();
         currentYaw = sensorSystem.getYaw();  //Set variables to gyro readings
         while (Math.abs(currentYaw - target) > tolerance && opModeIsActive()) {//Continue while the robot direction is further than three degrees from the target
 

@@ -5,20 +5,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAuto;
 
 /**
- * Created by Julian on 12/1/2017.
+ * Created by Julian on 12/17/2017.
  */
-@Autonomous (name = "GyroTest", group = "Util")
-public class GyroTurnTest extends UltronAuto {
-
-    public GyroTurnTest() {
+@Autonomous(name = "DriveTurnTest", group = "Util")
+public class DriveTurnTest extends UltronAuto {
+    public DriveTurnTest() {
         super(null);
     }
 
     @Override
     public void main() {
-        turn(Math.PI/2, 0.5);
-        sleep(2000);
-        turn(-Math.PI/2, -0.5);
-        sleep(2000);
+        driveSystem.driveAngle(0,Math.PI/2,1);
+        sleep(1000);
+        driveSystem.stopMotors();
     }
 }
