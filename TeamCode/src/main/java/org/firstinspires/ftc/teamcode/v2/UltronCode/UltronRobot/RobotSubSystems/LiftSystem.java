@@ -16,6 +16,10 @@ public class LiftSystem extends SubSystem {
 
     private boolean dPadWasUp = false;
     private boolean dPadWasDown = false;
+    private boolean notManual = true;
+    private double liftPower = 0;
+    private boolean resettingLift = false;
+    private long resetEndTime = 0;
 
     public enum LiftState{
         ZERO_CUBE_HEIGHT,
@@ -51,12 +55,16 @@ public class LiftSystem extends SubSystem {
     public void handle() {
         if (robot.TWO_DRIVERS) {
             handleChangeInDPad(gamepad2());
-            manualControls(gamepad2());
+            //manualControls(gamepad2());
+//            resetLift(gamepad1());
         }else {
             handleChangeInDPad(gamepad1());
-            manualControls(gamepad1());
+            //manualControls(gamepad1());
+//            resetLift(gamepad1());
         }
-        goToState(liftState);
+//        if (!resettingLift) {
+            goToState(liftState);
+//        }
 
         telemetry().addData("Lift Position: ", getLiftPosition());
     }
@@ -65,6 +73,22 @@ public class LiftSystem extends SubSystem {
     public void stop() {
         liftFloatMode();
         setLiftPower(0);
+    }
+
+    public void resetLift(Gamepad gamepad) {
+        if (gamepad.left_stick_button) {
+            resettingLift = true;
+            resetEndTime = System.currentTimeMillis() + 500;
+        }
+        if (System.currentTimeMillis()< resetEndTime) {
+            rightLiftMotor.setPower(-1);
+            leftLiftMotor.setPower(-1);
+        }
+        if (resettingLift && System.currentTimeMillis() > resetEndTime) {
+            resetEncoders();
+            setLiftVoltageMode();
+            resettingLift = false;
+        }
     }
 
     public void liftFloatMode() {
@@ -152,15 +176,15 @@ public class LiftSystem extends SubSystem {
     }
 
     public void manualControls(Gamepad gamepad) {
-        if (gamepad.right_trigger>0.01){
-            leftLiftMotor.setPower(gamepad.right_trigger);
-            rightLiftMotor.setPower(gamepad.right_trigger);
-        }else if (gamepad.left_trigger>0.01){
-            leftLiftMotor.setPower(-gamepad.left_trigger);
-            rightLiftMotor.setPower(-gamepad.left_trigger);
-        }else{
-            rightLiftMotor.setPower(0);
-            leftLiftMotor.setPower(0);
+        if ((gamepad.right_trigger>0.1) || gamepad.left_trigger>0.1) {
+            notManual = false;
+            if (gamepad.right_trigger>0.01){
+                liftPower = gamepad.right_trigger;
+            }else if (gamepad.left_trigger>0.01) {
+                liftPower = gamepad.left_trigger;
+            }
+            leftLiftMotor.setPower(liftPower);
+            rightLiftMotor.setPower(liftPower);
         }
     }
 

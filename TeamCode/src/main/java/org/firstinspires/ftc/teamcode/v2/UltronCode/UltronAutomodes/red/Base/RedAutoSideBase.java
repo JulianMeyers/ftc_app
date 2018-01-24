@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.red.Base;
 
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronAutomodes.UltronAutoRed;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.LiftSystem;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
 
 /**
  * Created by Julian on 12/2/2017.
@@ -11,6 +12,42 @@ public class RedAutoSideBase extends UltronAutoRed {
 
     @Override
     public void main() {
+        long stopVuSearch = System.currentTimeMillis() + 5000;
+        VuforiaSystem.CryptoboxKey cryptoboxKey;
+        int[] positionSeen = new int[3];//Right is 0, center is 1, left is 2
+        while (opModeIsActive() && System.currentTimeMillis()< stopVuSearch) {
+            vuMark = vuforiaSystem.checkForVuMark();
+            switch (vuMark) {
+                case RIGHT:
+                    positionSeen[0]++;
+                    break;
+                case CENTER:
+                    positionSeen[1]++;
+                    break;
+                case LEFT:
+                    positionSeen[2]++;
+                    break;
+                case UNKNOWN:
+                    break;
+            }
+        }
+
+        int maxPos = 0;
+        for (int pos:positionSeen) {
+            if (pos>maxPos)
+                maxPos = pos;
+        }
+
+        if (maxPos == positionSeen[0]) {
+            telemetry.addData("I Saw", "Right");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.RIGHT;
+        } else if (maxPos == positionSeen[1]) {
+            telemetry.addData("I Saw", "Center");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.CENTER;
+        } else {
+            telemetry.addData("I Saw", "Left");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.LEFT;
+        }
         cubeSystem.closeTop();
         waitFor(0.5);
         autoGoToLiftPos(LiftSystem.LiftState.ONE_CUBE_HEIGHT);
@@ -27,7 +64,14 @@ public class RedAutoSideBase extends UltronAutoRed {
         knockOffJewelStraight(RCSBlue,RCSRed);
 
         turnAbsolute(Math.PI/2);//Turn left 90 degrees
-        driveForwardsToGivenPosition(0.5,450);//450 For Right, ??? for center, ??? for far
+        switch (cryptoboxKey) {
+            case LEFT:
+                driveForwardsToGivenPosition(0.5, 550);//Will likely need to be changed
+            case CENTER:
+                driveForwardsToGivenPosition(0.5, 350);//Will likely need to be changed
+            case RIGHT:
+                driveForwardsToGivenPosition(0.5, 250);//Will possibly need to be changed
+        }
         turnAbsolute(0);//Counter turn
         autoGoToLiftPos(LiftSystem.LiftState.HALF_CUBE_HEIGHT);
         waitFor(0.5);

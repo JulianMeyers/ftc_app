@@ -13,24 +13,42 @@ public class BlueAutoSideBase extends UltronAutoBlue {
 
     @Override
     public void main() {
-        VuforiaSystem.CryptoboxKey cryptoboxKey = VuforiaSystem.CryptoboxKey.LEFT;
-        RelicRecoveryVuMark vuMark = identifyVuMark(5000);
-
-        switch (vuMark) {
-            case RIGHT:
-                telemetry.addData("I saw", "Right");
-                cryptoboxKey = VuforiaSystem.CryptoboxKey.RIGHT;
-                break;
-            case CENTER:
-                telemetry.addData("I saw", "Center");
-                cryptoboxKey = VuforiaSystem.CryptoboxKey.CENTER;
-                break;
-            case LEFT:
-                telemetry.addData("I saw", "Left");
-                cryptoboxKey = VuforiaSystem.CryptoboxKey.LEFT;
-                break;
+        long stopVuSearch = System.currentTimeMillis() + 5000;
+        VuforiaSystem.CryptoboxKey cryptoboxKey;
+        int[] positionSeen = new int[3];//Right is 0, center is 1, left is 2
+        while (opModeIsActive() && System.currentTimeMillis()< stopVuSearch) {
+            vuMark = vuforiaSystem.checkForVuMark();
+            switch (vuMark) {
+                case RIGHT:
+                    positionSeen[0]++;
+                    break;
+                case CENTER:
+                    positionSeen[1]++;
+                    break;
+                case LEFT:
+                    positionSeen[2]++;
+                    break;
+                case UNKNOWN:
+                    break;
+            }
         }
 
+        int maxPos = 0;
+        for (int pos:positionSeen) {
+            if (pos>maxPos)
+                maxPos = pos;
+        }
+
+        if (maxPos == positionSeen[0]) {
+            telemetry.addData("I Saw", "Right");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.RIGHT;
+        } else if (maxPos == positionSeen[1]) {
+            telemetry.addData("I Saw", "Center");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.CENTER;
+        } else {
+            telemetry.addData("I Saw", "Left");
+            cryptoboxKey = VuforiaSystem.CryptoboxKey.LEFT;
+        }
         cubeSystem.closeTop();
         waitFor(0.5);
         autoGoToLiftPos(LiftSystem.LiftState.ONE_CUBE_HEIGHT);
@@ -42,54 +60,51 @@ public class BlueAutoSideBase extends UltronAutoBlue {
         int RCSBlue = sensorSystem.getBlueColor();
         telemetry.addData("Red",RCSRed);
         telemetry.addData("Blue",RCSBlue);
-
-        int distanceForJewel = 300;
-
-//        if (RCSBlue > RCSRed) {
-//            driveBackwardsToGivenPosition(-0.5,-distanceForJewel);// go backwards
-//            jewelSystem.rightUp();
-//            waitFor(1);
-//            driveForwardsToGivenPosition(0.5,distanceForJewel);
-//        } else if (RCSRed > RCSBlue){
-//            driveForwardsToGivenPosition(0.5,distanceForJewel);// go forwards
-//            jewelSystem.rightUp();//raise arm
-//            waitFor(1);
-//            driveBackwardsToGivenPosition(-0.5,-distanceForJewel);//go backwards
-//        } else {
-//            // something happened! don't move
-//        }
-
-        double turnForJewel = Math.PI/12;
-
-        if (RCSBlue > RCSRed) {
-            turn(turnForJewel);// go backwards
-            jewelSystem.rightUp();
-            waitFor(1);
-            turn(-turnForJewel);
-        } else if (RCSRed > RCSBlue){
-            turn(-turnForJewel);// go forwards
-            jewelSystem.rightUp();
-            waitFor(1);
-            turn(turnForJewel);
-        } else {
-            // something happened! don't move
-        }
         telemetry.update();
 
-        driveForwardsToGivenPosition(0.5, 2000 );
+        knockOffJewelStraight(RCSBlue,RCSRed);
 
-        turn(-Math.PI/2);
-
-        driveForwardsToGivenPosition(0.5,500);
-
-        turn(Math.PI/2);
-
-        driveTime(0.5,1);
-
+        turnAbsolute(-Math.PI/2);//Turn left 90 degrees
+        switch (cryptoboxKey) {
+            case LEFT:
+                driveForwardsToGivenPosition(0.5, 250);//Will likely need to be changed
+            case CENTER:
+                driveForwardsToGivenPosition(0.5, 350);//Will likely need to be changed
+            case RIGHT:
+                driveForwardsToGivenPosition(0.5, 550);//Will possibly need to be changed
+        }
+        turnAbsolute(0);//Counter turn
+        autoGoToLiftPos(LiftSystem.LiftState.HALF_CUBE_HEIGHT);
+        waitFor(0.5);
+        driveForwardsToGivenPosition(0.5,400);
+        driveTime(1,1);//Full speed into the cryptobox in case we are not lined up
         cubeSystem.openTop();
-
-        driveTime(-0.5,0.1);
-
+        driveBackwardsToGivenPosition(-0.5,-400);
         autoGoToLiftPos(LiftSystem.LiftState.ZERO_CUBE_HEIGHT);
+        driveTime(1,1);
+        waitFor(1);
+        driveBackwardsToGivenPosition(-0.5,-300);
+
+    }
+
+    private void knockOffJewelStraight(int Blue, int Red) {
+        int difference = Math.abs(Blue-Red);
+        if (difference > 4) {
+            if (Blue > Red) {
+                driveBackwardsToGivenPosition(-0.5, -150);// go backwards
+                jewelSystem.rightUp();
+                waitFor(0.5);
+                driveForwardsToGivenPosition(0.5, 2150);
+            } else if (Red > Blue) {
+                driveForwardsToGivenPosition(0.5, 150);// go forwards
+                jewelSystem.rightUp();//raise arm
+                waitFor(0.5);
+                driveForwardsToGivenPosition(0.5, 1800);
+            } else {
+                jewelSystem.rightUp();
+                waitFor(0.5);
+                driveForwardsToGivenPosition(0.5, 1900);
+            }
+        }
     }
 }
