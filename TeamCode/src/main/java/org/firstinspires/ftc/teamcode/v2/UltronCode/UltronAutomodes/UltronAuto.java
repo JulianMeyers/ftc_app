@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.SensorSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.RobotSubSystems.VuforiaSystem;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.Ultron;
+import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronRobot.UltronAutoRobot;
 import org.firstinspires.ftc.teamcode.v2.UltronCode.UltronUtil.SimpleColor;
 
 /**
@@ -45,7 +46,7 @@ public abstract class UltronAuto extends AutonomousProgram{
 
     @Override
     protected Robot buildRobot() {
-        Ultron ultron = new Ultron(this, alliance, false);
+        UltronAutoRobot ultron = new UltronAutoRobot(this, alliance, false);
         driveSystem = (DriveSystem)ultron.getSubSystem("drive");
         liftSystem = (LiftSystem)ultron.getSubSystem("lift");
         cubeSystem = (CubeSystem)ultron.getSubSystem("cube");

@@ -84,6 +84,5 @@ public class Ultron extends Robot{
         putSubSystem("lift", new LiftSystem(this));
         putSubSystem("cube", new CubeSystem(this));
         putSubSystem("jewel", new JewelSystem(this));
-        putSubSystem("vuforia", new VuforiaSystem(this));
     }
 }
